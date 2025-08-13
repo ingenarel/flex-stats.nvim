@@ -1,31 +1,30 @@
 local m = {}
 
-m.fileTimes = {}
+local db = require("flex-stats.db")
 
 function m.startInsertTime()
     local filetype = vim.opt.filetype:get()
-    m.fileTimes[filetype].lastInsertEnter = os.time()
+    m.database[filetype].lastInsertEnter = os.time()
 end
 
 function m.endInsertTime()
     local filetype = vim.opt.filetype:get()
-    m.fileTimes[filetype].totalTime = m.fileTimes[filetype].totalTime
-        + os.time()
-        - m.fileTimes[filetype].lastInsertEnter
-    m.fileTimes[filetype].lastInsertEnter = nil
+    m.database[filetype].totalTime = m.database[filetype].totalTime + os.time() - m.database[filetype].lastInsertEnter
+    m.database[filetype].lastInsertEnter = nil
 end
 
 function m.filetypeSetup()
     local filetype = vim.opt.filetype:get()
-    if type(m.fileTimes[filetype]) ~= "table" then
-        m.fileTimes[filetype] = {}
+    if type(m.database[filetype]) ~= "table" then
+        m.database[filetype] = {}
     end
-    if type(m.fileTimes[filetype].totalTime) ~= "number" then
-        m.fileTimes[filetype].totalTime = 0
+    if type(m.database[filetype].totalTime) ~= "number" then
+        m.database[filetype].totalTime = 0
     end
 end
 
 function m.setup()
+    m.database = db.readDataBase()
     vim.api.nvim_create_autocmd("FileType", {
         callback = m.filetypeSetup,
     })
@@ -35,6 +34,16 @@ function m.setup()
     vim.api.nvim_create_autocmd("InsertLeave", {
         callback = m.endInsertTime,
     })
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+            db.writeDataBase(m.database)
+        end,
+    })
+end
+
+function m.showStats()
+    db.writeDataBase(m.database)
+    vim.print(m.database)
 end
 
 return m
