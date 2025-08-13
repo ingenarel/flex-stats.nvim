@@ -2,8 +2,8 @@ local m = {}
 
 local db = require("flex-stats.db")
 
-function m.startMoveTime()
-    local filetype = vim.opt.filetype:get()
+function m.startMoveTime(filetype)
+    filetype = filetype or vim.opt.filetype:get()
     if filetype ~= nil or filetype ~= "" then
         m.filetypeSetup(filetype)
         if not m.database[filetype].lastMoveEnter then
@@ -12,8 +12,8 @@ function m.startMoveTime()
     end
 end
 
-function m.endMoveTime()
-    local filetype = vim.opt.filetype:get()
+function m.endMoveTime(filetype)
+    filetype = filetype or vim.opt.filetype:get()
     if filetype ~= nil or filetype ~= "" then
         m.filetypeSetup(filetype)
         if m.database[filetype].lastMoveEnter then
@@ -25,8 +25,8 @@ function m.endMoveTime()
     end
 end
 
-function m.startInsertTime()
-    local filetype = vim.opt.filetype:get()
+function m.startInsertTime(filetype)
+    filetype = filetype or vim.opt.filetype:get()
     if filetype ~= nil or filetype ~= "" then
         m.filetypeSetup(filetype)
         if not m.database[filetype].lastInsertEnter then
@@ -35,8 +35,8 @@ function m.startInsertTime()
     end
 end
 
-function m.endInsertTime()
-    local filetype = vim.opt.filetype:get()
+function m.endInsertTime(filetype)
+    filetype = filetype or vim.opt.filetype:get()
     if filetype ~= nil or filetype ~= "" then
         m.filetypeSetup(filetype)
         if m.database[filetype].lastInsertEnter then
