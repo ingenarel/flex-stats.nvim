@@ -32,11 +32,15 @@ function m.setup()
     vim.api.nvim_create_autocmd("FileType", {
         callback = m.filetypeSetup,
     })
-    vim.api.nvim_create_autocmd("InsertEnter", {
-        callback = m.startInsertTime,
-    })
-    vim.api.nvim_create_autocmd("InsertLeave", {
-        callback = m.endInsertTime,
+    vim.api.nvim_create_autocmd("ModeChanged", {
+        callback = function()
+            local currentMode = vim.fn.mode()
+            if string.find(currentMode, "i") then
+                m.startInsertTime()
+            else
+                m.endInsertTime()
+            end
+        end,
     })
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
