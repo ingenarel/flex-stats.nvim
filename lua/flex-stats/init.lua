@@ -89,17 +89,9 @@ function m.setup()
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
-            for lang, data in pairs(m.database) do
-                pcall(function()
-                    if data.lastMoveEnter then
-                        m.database[lang].lastMoveEnter = nil
-                    end
-                end)
-                pcall(function()
-                    if data.lastInsertEnter then
-                        m.database[lang].lastInsertEnter = nil
-                    end
-                end)
+            for lang, _ in pairs(m.database) do
+                m.endInsertTime()
+                m.endMoveTime()
             end
             db.writeDataBase(m.database)
         end,
