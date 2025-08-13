@@ -4,14 +4,14 @@ local db = require("flex-stats.db")
 
 function m.startMoveTime()
     local filetype = vim.opt.filetype:get()
-    if not m.database[filetype].lastMoveEnter then
+    if filetype and not m.database[filetype].lastMoveEnter then
         m.database[filetype].lastMoveEnter = os.time()
     end
 end
 
 function m.endMoveTime()
     local filetype = vim.opt.filetype:get()
-    if m.database[filetype].lastMoveEnter then
+    if filetype and m.database[filetype].lastMoveEnter then
         m.database[filetype].moveTotalTime = m.database[filetype].moveTotalTime
             + os.time()
             - m.database[filetype].lastMoveEnter
@@ -21,14 +21,14 @@ end
 
 function m.startInsertTime()
     local filetype = vim.opt.filetype:get()
-    if not m.database[filetype].lastInsertEnter then
+    if filetype and not m.database[filetype].lastInsertEnter then
         m.database[filetype].lastInsertEnter = os.time()
     end
 end
 
 function m.endInsertTime()
     local filetype = vim.opt.filetype:get()
-    if m.database[filetype].lastInsertEnter then
+    if filetype and m.database[filetype].lastInsertEnter then
         m.database[filetype].insertTotalTime = m.database[filetype].insertTotalTime
             + os.time()
             - m.database[filetype].lastInsertEnter
@@ -38,14 +38,16 @@ end
 
 function m.filetypeSetup()
     local filetype = vim.opt.filetype:get()
-    if type(m.database[filetype]) ~= "table" then
-        m.database[filetype] = {}
-    end
-    if type(m.database[filetype].insertTotalTime) ~= "number" then
-        m.database[filetype].insertTotalTime = 0
-    end
-    if type(m.database[filetype].moveTotalTime) ~= "number" then
-        m.database[filetype].moveTotalTime = 0
+    if filetype then
+        if type(m.database[filetype]) ~= "table" then
+            m.database[filetype] = {}
+        end
+        if type(m.database[filetype].insertTotalTime) ~= "number" then
+            m.database[filetype].insertTotalTime = 0
+        end
+        if type(m.database[filetype].moveTotalTime) ~= "number" then
+            m.database[filetype].moveTotalTime = 0
+        end
     end
 end
 
