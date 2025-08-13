@@ -36,8 +36,8 @@ function m.setup()
     })
     vim.api.nvim_create_autocmd("ModeChanged", {
         callback = function()
-            local currentMode = vim.fn.mode()
-            if string.find(currentMode, "i") then
+            local currentMode = string.lower(vim.fn.mode())
+            if string.find(currentMode, "i") or string.find(currentMode, "r") then
                 m.startInsertTime()
             else
                 m.endInsertTime()
