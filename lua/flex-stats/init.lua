@@ -4,7 +4,9 @@ local db = require("flex-stats.db")
 
 function m.startInsertTime()
     local filetype = vim.opt.filetype:get()
-    m.database[filetype].lastInsertEnter = os.time()
+    if not m.database[filetype].lastInsertEnter then
+        m.database[filetype].lastInsertEnter = os.time()
+    end
 end
 
 function m.endInsertTime()
