@@ -115,6 +115,11 @@ function m.setup()
 end
 
 function m.showStats()
+    ---#TODO: temporary fix, this for loop should get merged to the write db func
+    for lang, _ in pairs(m.database) do
+        m.endInsertTime(lang)
+        m.endMoveTime(lang)
+    end
     db.writeDataBase(m.database)
     vim.print(m.database)
 end
