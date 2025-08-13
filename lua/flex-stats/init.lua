@@ -12,7 +12,7 @@ end
 function m.endInsertTime()
     local filetype = vim.opt.filetype:get()
     if m.database[filetype].lastInsertEnter then
-        m.database[filetype].totalTime = m.database[filetype].totalTime
+        m.database[filetype].insertTotalTime = m.database[filetype].insertTotalTime
             + os.time()
             - m.database[filetype].lastInsertEnter
         m.database[filetype].lastInsertEnter = nil
@@ -24,8 +24,8 @@ function m.filetypeSetup()
     if type(m.database[filetype]) ~= "table" then
         m.database[filetype] = {}
     end
-    if type(m.database[filetype].totalTime) ~= "number" then
-        m.database[filetype].totalTime = 0
+    if type(m.database[filetype].insertTotalTime) ~= "number" then
+        m.database[filetype].insertTotalTime = 0
     end
 end
 
