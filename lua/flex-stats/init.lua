@@ -81,25 +81,29 @@ function m.setup()
         end,
     })
 
-    vim.api.nvim_create_autocmd("CursorMovedI", {
-        callback = function()
-            m.startInsertTime()
-        end,
-    })
     vim.api.nvim_create_autocmd("CursorHoldI", {
         callback = function()
             m.endInsertTime()
+            local id = {}
+            id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
+                callback = function()
+                    m.startInsertTime()
+                    vim.api.nvim_del_autocmd(id[1])
+                end,
+            })
         end,
     })
 
-    vim.api.nvim_create_autocmd("CursorMoved", {
-        callback = function()
-            m.startMoveTime()
-        end,
-    })
     vim.api.nvim_create_autocmd("CursorHold", {
         callback = function()
             m.endMoveTime()
+            local id = {}
+            id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
+                callback = function()
+                    m.startMoveTime()
+                    vim.api.nvim_del_autocmd(id[1])
+                end,
+            })
         end,
     })
 
