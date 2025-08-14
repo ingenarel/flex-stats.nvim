@@ -1,7 +1,7 @@
 local m = {}
 
 local db = require("flex-stats.core.db")
-local mT = require("flex-stats.core.modifyTime")
+local timer = require("flex-stats.core.timer")
 
 function m.setup()
     m.database = db.readDataBase()
@@ -9,13 +9,13 @@ function m.setup()
         callback = function()
             local currentMode = string.lower(vim.fn.mode())
             if string.find(currentMode, "i") or string.find(currentMode, "r") then
-                mT.startInsertTime(nil, m.database)
+                timer.startInsertTime(nil, m.database)
             else
-                mT.endInsertTime(nil, m.database)
+                timer.endInsertTime(nil, m.database)
                 if string.find(currentMode, "n") or string.find(currentMode, "v") then
-                    mT.startMoveTime(nil, m.database)
+                    timer.startMoveTime(nil, m.database)
                 else
-                    mT.endMoveTime(nil, m.database)
+                    timer.endMoveTime(nil, m.database)
                 end
             end
         end,
@@ -23,11 +23,11 @@ function m.setup()
 
     vim.api.nvim_create_autocmd("CursorHoldI", {
         callback = function()
-            mT.endInsertTime(nil, m.database)
+            timer.endInsertTime(nil, m.database)
             local id = {}
             id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
                 callback = function()
-                    mT.startInsertTime(nil, m.database)
+                    timer.startInsertTime(nil, m.database)
                     vim.api.nvim_del_autocmd(id[1])
                 end,
             })
@@ -36,11 +36,11 @@ function m.setup()
 
     vim.api.nvim_create_autocmd("CursorHold", {
         callback = function()
-            mT.endMoveTime(nil, m.database)
+            timer.endMoveTime(nil, m.database)
             local id = {}
             id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
                 callback = function()
-                    mT.startMoveTime(nil, m.database)
+                    timer.startMoveTime(nil, m.database)
                     vim.api.nvim_del_autocmd(id[1])
                 end,
             })
@@ -50,8 +50,8 @@ function m.setup()
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
             for lang, _ in pairs(m.database) do
-                mT.endInsertTime(lang, m.database)
-                mT.endMoveTime(lang, m.database)
+                timer.endInsertTime(lang, m.database)
+                timer.endMoveTime(lang, m.database)
             end
             db.writeDataBase(m.database)
         end,
@@ -61,8 +61,8 @@ end
 function m.showStats()
     ---#TODO: temporary fix, this for loop should get merged to the write db func
     for lang, _ in pairs(m.database) do
-        mT.endInsertTime(lang, m.database)
-        mT.endMoveTime(lang, m.database)
+        timer.endInsertTime(lang, m.database)
+        timer.endMoveTime(lang, m.database)
     end
     db.writeDataBase(m.database)
     vim.print(m.database)
