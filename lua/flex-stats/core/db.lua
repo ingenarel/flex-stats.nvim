@@ -1,5 +1,7 @@
 local m = {}
 
+local timer = require("flex-stats.core.timer")
+
 function m.create()
     vim.fn.mkdir(vim.fn.stdpath("data") .. "/flex-stats", "p")
     local file = io.open(vim.fn.stdpath("data") .. "/flex-stats/db.json", "w")
@@ -30,8 +32,12 @@ function m.readDataBase()
     return fileContent
 end
 
-function m.writeDataBase(table)
-    local outputJson = vim.json.encode(table)
+function m.writeDataBase(db)
+    for lang, _ in pairs(db) do
+        timer.endInsertTime(lang, db)
+        timer.endMoveTime(lang, db)
+    end
+    local outputJson = vim.json.encode(db)
     if outputJson ~= false then
         local file = io.open(vim.fn.stdpath("data") .. "/flex-stats/db.json", "w")
         if file ~= nil then

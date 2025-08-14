@@ -49,21 +49,12 @@ function m.setup()
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
-            for lang, _ in pairs(m.database) do
-                timer.endInsertTime(lang, m.database)
-                timer.endMoveTime(lang, m.database)
-            end
             db.writeDataBase(m.database)
         end,
     })
 end
 
 function m.showStats()
-    ---#TODO: temporary fix, this for loop should get merged to the write db func
-    for lang, _ in pairs(m.database) do
-        timer.endInsertTime(lang, m.database)
-        timer.endMoveTime(lang, m.database)
-    end
     db.writeDataBase(m.database)
     vim.print(m.database)
 end
