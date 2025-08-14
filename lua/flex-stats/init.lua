@@ -1,6 +1,6 @@
 local m = {}
 
-local db = require("flex-stats.db")
+local db = require("flex-stats.core.db")
 
 function m.startMoveTime(filetype)
     filetype = filetype or vim.opt.filetype:get()
