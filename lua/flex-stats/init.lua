@@ -59,22 +59,4 @@ function m.showStats()
     vim.print(m.database)
 end
 
-function m.migrate(oldName, newName)
-    for lang, _ in pairs(m.database) do
-        local oldNameType = type(m.database[lang][oldName])
-        if oldNameType == "number" then
-            if type(m.database[lang][newName]) ~= "number" then
-                m.database[lang][newName] = 0
-            end
-            m.database[lang][newName] = m.database[lang][newName] + m.database[lang][oldName]
-        elseif oldNameType == "table" then
-            if type(m.database[lang][newName]) ~= "table" then
-                m.database[lang][newName] = {}
-            end
-            m.database[lang][newName] = m.database[lang][newName] + m.database[lang][oldName]
-        end
-        m.database[lang][oldName] = nil
-    end
-end
-
 return m
