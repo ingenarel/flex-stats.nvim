@@ -7,8 +7,8 @@ function m.filetypeSetup(filetype, database)
     if type(database[filetype]) ~= "table" then
         database[filetype] = {}
     end
-    if type(database[filetype].insertTotalTime) ~= "number" then
-        database[filetype].insertTotalTime = 0
+    if type(database[filetype].editTotalTime) ~= "number" then
+        database[filetype].editTotalTime = 0
     end
     if type(database[filetype].moveTotalTime) ~= "number" then
         database[filetype].moveTotalTime = 0
@@ -38,25 +38,25 @@ function m.endMoveTime(filetype, database)
     end
 end
 
-function m.startInsertTime(filetype, database)
+function m.startEditTime(filetype, database)
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)
-        if not database[filetype].lastInsertEnter then
-            database[filetype].lastInsertEnter = os.time()
+        if not database[filetype].lastEditEnter then
+            database[filetype].lastEditEnter = os.time()
         end
     end
 end
 
-function m.endInsertTime(filetype, database)
+function m.endEditTime(filetype, database)
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)
-        if database[filetype].lastInsertEnter then
-            database[filetype].insertTotalTime = database[filetype].insertTotalTime
+        if database[filetype].lastEditEnter then
+            database[filetype].editTotalTime = database[filetype].editTotalTime
                 + os.time()
-                - database[filetype].lastInsertEnter
-            database[filetype].lastInsertEnter = nil
+                - database[filetype].lastEditEnter
+            database[filetype].lastEditEnter = nil
         end
     end
 end

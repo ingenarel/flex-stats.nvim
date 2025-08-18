@@ -34,7 +34,7 @@ end
 
 function m.writeDataBase(db)
     for lang, _ in pairs(db) do
-        timer.endInsertTime(lang, db)
+        timer.endEditTime(lang, db)
         timer.endMoveTime(lang, db)
     end
     local outputJson = vim.json.encode(db)
