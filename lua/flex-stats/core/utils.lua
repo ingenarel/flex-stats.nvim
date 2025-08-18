@@ -1,6 +1,7 @@
 local m = {}
 
-function m.migrate(database, oldName, newName)
+function m.migrate(oldName, newName)
+    local database = require("flex-stats").database
     for lang, _ in pairs(database) do
         local oldNameType = type(database[lang][oldName])
         if oldNameType == "number" then
