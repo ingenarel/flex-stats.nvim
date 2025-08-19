@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 vim.api.nvim_create_autocmd("CursorHoldI", {
     callback = function()
         timer.endEditTime(nil, database)
+        ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
             callback = function()
@@ -32,6 +33,7 @@ vim.api.nvim_create_autocmd("CursorHoldI", {
 vim.api.nvim_create_autocmd("CursorHold", {
     callback = function()
         timer.endMoveTime(nil, database)
+        ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
             callback = function()

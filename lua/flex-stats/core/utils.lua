@@ -1,7 +1,10 @@
 local m = {}
 
+---@param oldName string
+---@param newName string
 function m.migrate(oldName, newName)
     local database = require("flex-stats").database
+    ---@param lang string
     for lang, _ in pairs(database) do
         local oldNameType = type(database[lang][oldName])
         if oldNameType == "nil" then
