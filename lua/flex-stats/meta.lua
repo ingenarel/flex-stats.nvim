@@ -6,30 +6,26 @@ local flex = {}
 ---@class flex.timer
 flex.timer = {}
 
----flex.filetype: the name of the filetype. should be accessible via
----vim.opt.filetype
+---the name of the filetype. should be accessible via vim.opt.filetype
 ---@alias flex.filetype string
-
----flex.filetype or nil
----@alias flex.filetypeOrNil flex.filetype|nil
 
 ---@param filetype flex.filetype
 ---@param database flex.database
 function flex.timer.filetypeSetup(filetype, database) end
 
----@param filetype flex.filetypeOrNil
+---@param filetype flex.filetype?
 ---@param database flex.database
 function flex.timer.startMoveTime(filetype, database) end
 
----@param filetype flex.filetypeOrNil
+---@param filetype flex.filetype?
 ---@param database flex.database
 function flex.timer.endMoveTime(filetype, database) end
 
----@param filetype flex.filetypeOrNil
+---@param filetype flex.filetype?
 ---@param database flex.database
 function flex.timer.startEditTime(filetype, database) end
 
----@param filetype flex.filetypeOrNil
+---@param filetype flex.filetype?
 ---@param database flex.database
 function flex.timer.endEditTime(filetype, database) end
 
