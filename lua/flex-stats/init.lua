@@ -13,7 +13,7 @@ end
 
 function m.showStats()
     db.writeDataBase(m.database)
-    vim.print(m.database)
+    require("flex-stats.ui").showUI()
 end
 
 return m
