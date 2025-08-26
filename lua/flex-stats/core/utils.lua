@@ -3,7 +3,6 @@ local m = {}
 
 function m.migrate(oldName, newName)
     local database = require("flex-stats").database
-    ---@param lang flex.filetype
     for lang, _ in pairs(database) do
         local oldNameType = type(database[lang][oldName])
         if oldNameType == "nil" then
@@ -17,7 +16,7 @@ function m.migrate(oldName, newName)
             if type(database[lang][newName]) ~= "table" then
                 database[lang][newName] = {}
             end
-            database[lang][newName] = database[lang][newName] + database[lang][oldName]
+            vim.tbl_deep_extend("force", database[lang][newName], database[lang][oldName])
         end
         database[lang][oldName] = nil
         ::continue::
