@@ -1,3 +1,4 @@
+---@type flex.db
 local m = {}
 
 local timer = require("flex-stats.core.timer")
@@ -32,7 +33,6 @@ function m.readDataBase()
     return fileContent
 end
 
----@param db table
 function m.writeDataBase(db)
     for lang, _ in pairs(db) do
         timer.endEditTime(lang, db)

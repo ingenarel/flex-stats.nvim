@@ -1,11 +1,11 @@
+---@type flex.timer
 local m = {}
 
----@param filetype string|nil
----@param database table
 function m.filetypeSetup(filetype, database)
     ---WARNING: this can't be in a filetype autocmd, it breaks with when i enter telescope for some reason
     -- altho calling it in every function where stuff is modified is the SAFEST option by far, it's still unoptimized
     -- maybe some pcalls in the modify functions? idk
+
     if type(database[filetype]) ~= "table" then
         database[filetype] = {}
     end
@@ -17,9 +17,8 @@ function m.filetypeSetup(filetype, database)
     end
 end
 
----@param filetype string|nil
----@param database table
 function m.startMoveTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)
@@ -29,9 +28,8 @@ function m.startMoveTime(filetype, database)
     end
 end
 
----@param filetype string|nil
----@param database table
 function m.endMoveTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)
@@ -44,9 +42,8 @@ function m.endMoveTime(filetype, database)
     end
 end
 
----@param filetype string|nil
----@param database table
 function m.startEditTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)
@@ -56,9 +53,8 @@ function m.startEditTime(filetype, database)
     end
 end
 
----@param filetype string|nil
----@param database table
 function m.endEditTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
     filetype = filetype or vim.opt.filetype:get()
     if filetype ~= "" then
         m.filetypeSetup(filetype, database)

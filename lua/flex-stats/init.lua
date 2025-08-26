@@ -1,9 +1,9 @@
+---@type flex.init
 local m = {}
 
 local db = require("flex-stats.core.db")
 
 function m.setup()
-    ---@type table
     m.database = db.readDataBase()
     require("flex-stats.core.autocmds")
 end
