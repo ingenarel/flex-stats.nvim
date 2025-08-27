@@ -1,18 +1,23 @@
 local timer = require("flex-stats.core.timer")
 local database = require("flex-stats").database
+
+local function modeCheck()
+    local currentMode = string.lower(vim.fn.mode())
+    if string.find(currentMode, "i") or string.find(currentMode, "r") then
+        timer.startEditTime(nil, database)
+    else
+        timer.endEditTime(nil, database)
+        if string.find(currentMode, "n") or string.find(currentMode, "v") then
+            timer.startMoveTime(nil, database)
+        else
+            timer.endMoveTime(nil, database)
+        end
+    end
+end
+
 vim.api.nvim_create_autocmd("ModeChanged", {
     callback = function()
-        local currentMode = string.lower(vim.fn.mode())
-        if string.find(currentMode, "i") or string.find(currentMode, "r") then
-            timer.startEditTime(nil, database)
-        else
-            timer.endEditTime(nil, database)
-            if string.find(currentMode, "n") or string.find(currentMode, "v") then
-                timer.startMoveTime(nil, database)
-            else
-                timer.endMoveTime(nil, database)
-            end
-        end
+        modeCheck()
     end,
 })
 
