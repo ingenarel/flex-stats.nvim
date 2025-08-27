@@ -117,6 +117,7 @@ flex.db = {}
 function flex.db.create() end
 
 ---@return flex.database
+---@nodiscard
 ---reads the database file and returns the database
 function flex.db.readDataBase() end
 
