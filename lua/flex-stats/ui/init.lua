@@ -6,6 +6,14 @@ local utils = require("flex-stats.ui.utils")
 function m.statsMenu(db, buf, win_width)
     local lines = {}
     local fileData = {}
+    db = vim.deepcopy(db)
+    db.noice = nil
+    db.TelescopePrompt = nil
+    db.notify = nil
+    db.lazy = nil
+    db.flexstats = nil
+    db.mason = nil
+    db.metapack = nil
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
         local editing = data["editTotalTime"] or 0
