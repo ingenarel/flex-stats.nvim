@@ -17,13 +17,13 @@ function m.statsMenu(db, buf, win_width)
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
         local editing = data["editTotalTime"] or 0
-        if moving > 0 and editing > 0 then
+        local total = moving + editing
+        if total > 0 then
             table.insert(fileData, {})
             table.insert(
                 fileData[#fileData],
                 (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang
             )
-            local total = moving + editing
             table.insert(fileData[#fileData], "total: " .. utils.time(total))
             table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
             table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
