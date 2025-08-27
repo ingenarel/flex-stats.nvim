@@ -5,28 +5,36 @@ local utils = require("flex-stats.ui.utils")
 
 function m.statsMenu(db, buf, win_width)
     local lines = {}
+    local fileData = {}
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
-
         local editing = data["editTotalTime"] or 0
         if moving > 0 and editing > 0 then
-            table.insert(lines, (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang)
+            table.insert(fileData, {})
+            table.insert(
+                fileData[#fileData],
+                (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang
+            )
             local total = moving + editing
-            table.insert(lines, "total: " .. utils.time(total))
-            table.insert(lines, "editing: " .. utils.time(editing))
-            table.insert(lines, "moving around: " .. utils.time(moving))
-            table.insert(lines, "")
+            table.insert(fileData[#fileData], "total: " .. utils.time(total))
+            table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
+            table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
+            table.insert(fileData[#fileData], "")
         end
     end
     local maxWidth = 0
-    for i = 1, #lines do
-        if #lines[i] > maxWidth then
-            maxWidth = #lines[i]
+    for i = 1, #fileData do
+        for j = 1, #fileData[i] do
+            if #fileData[i][j] > maxWidth then
+                maxWidth = #fileData[i][j]
+            end
         end
     end
-    for i = 1, #lines do
-        lines[i] = utils.center(lines[i], maxWidth)
-        -- lines[i] = utils.center(lines[i], win_width)
+    for i = 1, #fileData do
+        table.insert(lines, utils.center(fileData[i][1], maxWidth + 2))
+        for j = 2, #fileData[i] do
+            table.insert(lines, utils.center(fileData[i][j], maxWidth))
+        end
     end
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
