@@ -15,6 +15,19 @@ local function modeCheck()
     end
 end
 
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        modeCheck()
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufLeave", {
+    callback = function()
+        timer.endMoveTime(nil, database)
+        timer.endEditTime(nil, database)
+    end,
+})
+
 vim.api.nvim_create_autocmd("ModeChanged", {
     callback = function()
         modeCheck()
