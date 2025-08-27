@@ -52,6 +52,7 @@ function m.showUI(opts)
         border = "rounded",
         style = "minimal",
     })
+    vim.bo[bufID].filetype = "flexstats"
     local db = require("flex-stats").database
     db[""] = nil
     vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
