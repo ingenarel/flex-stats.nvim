@@ -20,8 +20,12 @@ function m.statsMenu(db, buf, win_width)
             table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
             table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
             table.insert(fileData[#fileData], "")
+            fileData[#fileData].totalTime = total
         end
     end
+    table.sort(fileData, function(element1, element2)
+        return (element1.totalTime > element2.totalTime)
+    end)
     local maxWidth = 0
     for i = 1, #fileData do
         for j = 1, #fileData[i] do
