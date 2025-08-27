@@ -26,9 +26,10 @@ function m.time(seconds)
     return returnString
 end
 
-function m.center(input, width)
-    local indent = string.rep(" ", math.floor((width - #input) / 2))
-    return indent .. input .. string.rep(" ", width - #indent - #input)
+function m.center(input, width, char)
+    char = char or " "
+    local indent = string.rep(char, math.floor((width - #input) / 2))
+    return indent .. input .. string.rep(char, width - #indent - #input)
 end
 
 return m
