@@ -26,15 +26,13 @@ function m.statsMenu(db, buf, win_width)
     table.sort(fileData, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    local maxWidth = 0
     for i = 1, #fileData do
+        local maxWidth = 0
         for j = 1, #fileData[i] do
             if #fileData[i][j] > maxWidth then
                 maxWidth = #fileData[i][j]
             end
         end
-    end
-    for i = 1, #fileData do
         table.insert(lines, utils.center(fileData[i][1], maxWidth + 2))
         for j = 2, #fileData[i] do
             table.insert(lines, utils.center(fileData[i][j], maxWidth))
