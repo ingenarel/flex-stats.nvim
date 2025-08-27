@@ -40,15 +40,6 @@ function flex.timer.startEditTime(filetype, database) end
 ---@param database flex.database
 function flex.timer.endEditTime(filetype, database) end
 
---
---
---
---
---
---
---
---
-
 ---table with the filetypes as a string, then the value should be the filetype's
 ---data
 ---@alias flex.database table<flex.filetype, flex.database.data|{}>
@@ -78,15 +69,6 @@ flex.utils = {}
 ---merge the two tables
 function flex.utils.migrate(oldName, newName) end
 
---
---
---
---
---
---
---
---
-
 ---module containing the init functions
 ---@class flex.init
 flex.init = {}
@@ -99,15 +81,6 @@ function flex.init.setup() end
 
 ---to show the stats
 function flex.init.showStats() end
-
---
---
---
---
---
---
---
---
 
 ---the module containing the database functions
 ---@class flex.db
