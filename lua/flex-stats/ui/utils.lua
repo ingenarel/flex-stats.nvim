@@ -1,3 +1,4 @@
+---@type flex.ui.utils
 local m = {}
 function m.time(seconds)
     local minutes = 0

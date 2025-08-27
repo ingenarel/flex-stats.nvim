@@ -1,3 +1,4 @@
+---@type flex.ui.init
 local m = {}
 
 local utils = require("flex-stats.ui.utils")

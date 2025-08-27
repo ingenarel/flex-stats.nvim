@@ -97,3 +97,35 @@ function flex.db.readDataBase() end
 ---@param db flex.database
 ---writes the database file
 function flex.db.writeDataBase(db) end
+
+flex.ui = {}
+---@class flex.ui.init
+flex.ui.init = {}
+
+---@param db flex.database
+---@param buf integer the buffer number
+---@param win_width integer the window width
+---shows the stats menu on a buffer
+function flex.ui.init.statsMenu(db, buf, win_width) end
+
+---@param opts flex.ui.init.showUIOpts?
+---opens the ui
+function flex.ui.init.showUI(opts) end
+
+---@class flex.ui.init.showUIOpts
+---@field width integer? the window width, default is 80
+---@field height integer? the window height, default is 80
+
+---@class flex.ui.utils
+flex.ui.utils = {}
+
+---@param seconds integer number of seconds
+---@return string # human readable format of the number of seconds
+---@nodiscard
+function flex.ui.utils.time(seconds) end
+
+---@param input string
+---@param width integer the width to center the string to
+---@param char char? char to use as the indent for both sides, default is space
+---centers a string to fit inside the middle of the width
+function flex.ui.utils.center(input, width, char) end
