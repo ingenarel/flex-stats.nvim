@@ -122,7 +122,7 @@ function m.fileStatsMenu3rdPass(db)
     return lines
 end
 
-function m.fileStatsMenu4thPass(db, win_width, opts)
+function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
     local lines = {}
     for x = 1, #db do
         for y = 1, #db[x] do
@@ -133,7 +133,7 @@ function m.fileStatsMenu4thPass(db, win_width, opts)
                 z = z + 1
             end
             if y == 1 then
-                gap = gap - opts.indentDriftForIcon * (z - 1)
+                gap = gap - indentDriftForIcon * (z - 1)
             end
             gap = math.floor((win_width - gap) / z + 1)
             local line = ""

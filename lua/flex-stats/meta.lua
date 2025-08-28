@@ -110,8 +110,8 @@ flex.ui.init = {}
 function flex.ui.init.fileStatsMenu(db, buf, win_width, opts) end
 
 ---@class flex.ui.init.fileStatsMenuOpts
----@field indentDriftForIcon integer? default value is 2
----@field gap integer? default value is 2
+---@field indentDriftForIcon integer? indent drift for icons
+---@field gap integer?
 
 ---@param opts flex.ui.init.showUIOpts?
 ---opens the ui
@@ -134,3 +134,36 @@ function flex.ui.utils.time(seconds) end
 ---@param char char? char to use as the indent for both sides, default is space
 ---centers a string to fit inside the middle of the width
 function flex.ui.utils.center(input, width, char) end
+
+---@param db flex.database
+---@return flex.ui.utils.fileStatsMenu1stPassReturn[]
+---@nodiscard
+function flex.ui.utils.fileStatsMenu1stPass(db) end
+
+---@class flex.ui.utils.fileStatsMenu1stPassReturn
+---@field [1] string file icon and name
+---@field [2] string total time in human readable format
+---@field [3] string move info|edit info in human readable format
+---@field [4] string move info|edit info| nil
+---@field [5] string empty line
+---@field [6] string empty line
+---@field totalTime integer total time in seconds
+
+---@param db flex.ui.utils.fileStatsMenu1stPassReturn[]
+---@param win_width integer the window width
+---@param opts flex.ui.init.fileStatsMenuOpts optional args
+---@return string[][][]
+---@nodiscard
+function flex.ui.utils.fileStatsMenu2ndPass(db, win_width, opts) end
+
+---@param db string[][][]
+---@return string[][][]
+---@nodiscard
+function flex.ui.utils.fileStatsMenu3rdPass(db) end
+
+---@param db string[][][]
+---@param win_width integer the window width
+---@param indentDriftForIcon integer indent drift for icons
+---@return string[]
+---@nodiscard
+function flex.ui.utils.fileStatsMenu4thPass(db, win_width, indentDriftForIcon) end

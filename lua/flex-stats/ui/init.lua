@@ -22,7 +22,7 @@ function m.fileStatsMenu(db, buf, win_width, opts)
     end)
     db = utils.fileStatsMenu2ndPass(db, win_width, opts)
     db = utils.fileStatsMenu3rdPass(db)
-    db = utils.fileStatsMenu4thPass(db, win_width, opts)
+    db = utils.fileStatsMenu4thPass(db, win_width, opts.indentDriftForIcon)
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
