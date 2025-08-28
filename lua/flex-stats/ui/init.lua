@@ -104,6 +104,7 @@ function m.statsMenu(db, buf, win_width, opts)
     db.flexstats = nil
     db.mason = nil
     db.metapack = nil
+    db.checkhealth = nil
     db = statsMenufirstPass(db)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
