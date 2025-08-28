@@ -29,7 +29,7 @@ function m.statsMenu(db, buf, win_width)
                 table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
             end
             if moving > 0 then
-                table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
+                table.insert(fileData[#fileData], "moving: " .. utils.time(moving))
             end
             table.insert(fileData[#fileData], "")
             fileData[#fileData].totalTime = total
