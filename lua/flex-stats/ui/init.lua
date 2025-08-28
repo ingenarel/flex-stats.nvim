@@ -3,13 +3,98 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
+local function statsMenufirstPass(db)
+    local fp = {}
+    for lang, data in pairs(db) do
+        local moving = data["moveTotalTime"] or 0
+        local editing = data["editTotalTime"] or 0
+        local total = moving + editing
+        if total > 0 then
+            table.insert(fp, {})
+            table.insert(fp[#fp], (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang)
+            table.insert(fp[#fp], "total: " .. utils.time(total))
+            if editing > 0 then
+                table.insert(fp[#fp], "editing: " .. utils.time(editing))
+            end
+            if moving > 0 then
+                table.insert(fp[#fp], "moving: " .. utils.time(moving))
+            end
+            for _ = #fp[#fp], 4 do
+                table.insert(fp[#fp], "")
+            end
+            fp[#fp].totalTime = total
+        end
+    end
+    return fp
+end
+
+local function statsMenuSecondPass(db, win_width, opts)
+    local sp = {}
+    local i = 1
+    while i <= #db do
+        local maxWidth = 0
+        for j = 1, #db[i] do
+            if #db[i][j] > maxWidth then
+                maxWidth = #db[i][j]
+            end
+        end
+        table.insert(sp, {})
+        table.insert(sp[#sp], {})
+        table.insert(sp[#sp][#sp[#sp]], utils.center(db[i][1], maxWidth + opts.indentDriftForIcon))
+        for j = 2, #db[i] do
+            table.insert(sp[#sp][#sp[#sp]], utils.center(db[i][j], maxWidth))
+        end
+        while i + 1 <= #db do
+            local tmp = i + 1
+            local nextMaxWidth = 0
+            for nextMaxWidthLoopJ = 1, #db[tmp] do
+                if #db[tmp][nextMaxWidthLoopJ] > nextMaxWidth then
+                    nextMaxWidth = #db[tmp][nextMaxWidthLoopJ]
+                end
+            end
+            local secondPassLastConcatantedLen = 0
+            for secondPassLastConcatantedLenLoopJ = 1, #sp[#sp] do
+                secondPassLastConcatantedLen = secondPassLastConcatantedLen
+                    + #sp[#sp][secondPassLastConcatantedLenLoopJ][1]
+                    + opts.gap
+            end
+            if secondPassLastConcatantedLen + nextMaxWidth < win_width then
+                i = tmp
+                table.insert(sp[#sp], {})
+                table.insert(sp[#sp][#sp[#sp]], utils.center(db[i][1], nextMaxWidth + opts.indentDriftForIcon))
+                for line = 2, #db[i] do
+                    table.insert(sp[#sp][#sp[#sp]], utils.center(db[i][line], nextMaxWidth))
+                end
+            else
+                break
+            end
+            i = i + 1
+        end
+    end
+    return sp
+end
+
+local function statsMenuThirdPass(db, opts)
+    local lines = {}
+    for x = 1, #db do
+        local tempLineNum = 1
+        ---@diagnostic disable-next-line: unused-local
+        for y = 1, #db[x][1] do
+            local line = ""
+            for z = 1, #db[x] do
+                line = line .. string.rep(" ", opts.gap) .. (db[x][z][tempLineNum] or "")
+            end
+            table.insert(lines, line)
+            tempLineNum = tempLineNum + 1
+        end
+    end
+    return lines
+end
+
 function m.statsMenu(db, buf, win_width, opts)
     opts = opts or {}
     opts.indentDriftForIcon = opts.indentDriftForIcon or 2
     opts.gap = opts.gap or 5
-    local lines = {}
-    local firstPass = {}
-    local secondPass = {}
     db = vim.deepcopy(db)
     db.noice = nil
     db.TelescopePrompt = nil
@@ -18,95 +103,14 @@ function m.statsMenu(db, buf, win_width, opts)
     db.flexstats = nil
     db.mason = nil
     db.metapack = nil
-    for lang, data in pairs(db) do
-        local moving = data["moveTotalTime"] or 0
-        local editing = data["editTotalTime"] or 0
-        local total = moving + editing
-        if total > 0 then
-            table.insert(firstPass, {})
-            table.insert(
-                firstPass[#firstPass],
-                (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang
-            )
-            table.insert(firstPass[#firstPass], "total: " .. utils.time(total))
-            if editing > 0 then
-                table.insert(firstPass[#firstPass], "editing: " .. utils.time(editing))
-            end
-            if moving > 0 then
-                table.insert(firstPass[#firstPass], "moving: " .. utils.time(moving))
-            end
-            for _ = #firstPass[#firstPass], 4 do
-                table.insert(firstPass[#firstPass], "")
-            end
-            firstPass[#firstPass].totalTime = total
-        end
-    end
-    table.sort(firstPass, function(element1, element2)
+    db = statsMenufirstPass(db)
+    table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    local i = 1
-    while i <= #firstPass do
-        local maxWidth = 0
-        for j = 1, #firstPass[i] do
-            if #firstPass[i][j] > maxWidth then
-                maxWidth = #firstPass[i][j]
-            end
-        end
-        table.insert(secondPass, {})
-        table.insert(secondPass[#secondPass], {})
-        table.insert(
-            secondPass[#secondPass][#secondPass[#secondPass]],
-            utils.center(firstPass[i][1], maxWidth + opts.indentDriftForIcon)
-        )
-        for j = 2, #firstPass[i] do
-            table.insert(secondPass[#secondPass][#secondPass[#secondPass]], utils.center(firstPass[i][j], maxWidth))
-        end
-        while i + 1 <= #firstPass do
-            local tmp = i + 1
-            local nextMaxWidth = 0
-            for j = 1, #firstPass[tmp] do
-                if #firstPass[tmp][j] > nextMaxWidth then
-                    nextMaxWidth = #firstPass[tmp][j]
-                end
-            end
-            local secondPassLastConcatantedLen = 0
-            for p = 1, #secondPass[#secondPass] do
-                secondPassLastConcatantedLen = secondPassLastConcatantedLen + #secondPass[#secondPass][p][1] + opts.gap
-            end
-            if secondPassLastConcatantedLen + nextMaxWidth < win_width then
-                i = tmp
-                table.insert(secondPass[#secondPass], {})
-                table.insert(
-                    secondPass[#secondPass][#secondPass[#secondPass]],
-                    utils.center(firstPass[i][1], nextMaxWidth + opts.indentDriftForIcon)
-                )
-                for line = 2, #firstPass[i] do
-                    table.insert(
-                        secondPass[#secondPass][#secondPass[#secondPass]],
-                        utils.center(firstPass[i][line], nextMaxWidth)
-                    )
-                end
-                i = i + 1
-            else
-                break
-            end
-        end
-    end
-    firstPass = nil
-    for x = 1, #secondPass do
-        local tempLineNum = 1
-        ---@diagnostic disable-next-line: unused-local
-        for y = 1, #secondPass[x][1] do
-            local line = ""
-            for z = 1, #secondPass[x] do
-                line = line .. string.rep(" ", opts.gap) .. (secondPass[x][z][tempLineNum] or "")
-            end
-            table.insert(lines, line)
-            tempLineNum = tempLineNum + 1
-        end
-    end
+    db = statsMenuSecondPass(db, win_width, opts)
+    db = statsMenuThirdPass(db, opts)
     vim.bo[buf].modifiable = true
-    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
 end
 
