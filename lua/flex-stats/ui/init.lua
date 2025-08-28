@@ -3,7 +3,7 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
-local function statsMenufirstPass(db)
+local function statsMenu1stPass(db)
     local fp = {}
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
@@ -28,7 +28,7 @@ local function statsMenufirstPass(db)
     return fp
 end
 
-local function statsMenuSecondPass(db, win_width, opts)
+local function statsMenu2ndPass(db, win_width, opts)
     local sp = {}
     local i = 1
     while i <= #db do
@@ -75,7 +75,7 @@ local function statsMenuSecondPass(db, win_width, opts)
     return sp
 end
 
-local function statsMenuThirdPass(db, opts)
+local function statsMenu3rdPass(db, opts)
     local lines = {}
     for x = 1, #db do
         local tempLineNum = 1
@@ -106,12 +106,12 @@ function m.statsMenu(db, buf, win_width, opts)
     db.mason = nil
     db.metapack = nil
     db.checkhealth = nil
-    db = statsMenufirstPass(db)
+    db = statsMenu1stPass(db)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    db = statsMenuSecondPass(db, win_width, opts)
-    db = statsMenuThirdPass(db, opts)
+    db = statsMenu2ndPass(db, win_width, opts)
+    db = statsMenu3rdPass(db, opts)
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
