@@ -19,7 +19,7 @@ local function statsMenu1stPass(db)
             if moving > 0 then
                 table.insert(fp[#fp], "moving: " .. utils.time(moving))
             end
-            for _ = #fp[#fp], 4 do
+            for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")
             end
             fp[#fp].totalTime = total
@@ -75,19 +75,44 @@ local function statsMenu2ndPass(db, win_width, opts)
     return sp
 end
 
-local function statsMenu3rdPass(db, opts)
+local function statsMenu3rdPass(db)
     local lines = {}
     for x = 1, #db do
         local tempLineNum = 1
+        table.insert(lines, {})
         ---@diagnostic disable-next-line: unused-local
         for y = 1, #db[x][1] do
-            local line = ""
-            for z = 1, #db[x] - 1 do
-                line = line .. (db[x][z][tempLineNum] or "") .. string.rep(" ", opts.gap)
+            table.insert(lines[#lines], {})
+            for z = 1, #db[x] do
+                table.insert(lines[#lines][#lines[#lines]], db[x][z][tempLineNum])
             end
-            line = line .. (db[x][#db[x]][tempLineNum] or "")
-            table.insert(lines, line)
             tempLineNum = tempLineNum + 1
+        end
+    end
+    return lines
+end
+
+local function statsMenu4thPass(db, win_width, opts)
+    local lines = {}
+    for x = 1, #db do
+        for y = 1, #db[x] do
+            local gap = 0
+            local z = 1
+            while z <= #db[x][y] do
+                gap = gap + #db[x][y][z]
+                z = z + 1
+            end
+            if y == 1 then
+                gap = gap - opts.indentDriftForIcon * (z - 1)
+            end
+            gap = math.floor((win_width - gap) / z + 1)
+            local line = ""
+            ---@diagnostic disable-next-line: redefined-local
+            for z = 1, #db[x][y] do
+                line = line .. string.rep(" ", gap) .. db[x][y][z]
+                z = z + 1
+            end
+            table.insert(lines, line)
         end
     end
     return lines
@@ -111,7 +136,8 @@ function m.statsMenu(db, buf, win_width, opts)
         return (element1.totalTime > element2.totalTime)
     end)
     db = statsMenu2ndPass(db, win_width, opts)
-    db = statsMenu3rdPass(db, opts)
+    db = statsMenu3rdPass(db)
+    db = statsMenu4thPass(db, win_width, opts)
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
