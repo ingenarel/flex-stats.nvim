@@ -25,8 +25,12 @@ function m.statsMenu(db, buf, win_width)
                 (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang
             )
             table.insert(fileData[#fileData], "total: " .. utils.time(total))
-            table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
-            table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
+            if editing > 0 then
+                table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
+            end
+            if moving > 0 then
+                table.insert(fileData[#fileData], "moving around: " .. utils.time(moving))
+            end
             table.insert(fileData[#fileData], "")
             fileData[#fileData].totalTime = total
         end
