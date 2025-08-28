@@ -105,8 +105,12 @@ flex.ui.init = {}
 ---@param db flex.database
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
+---@param opts flex.ui.init.statsMenuOpts? optional args
 ---shows the stats menu on a buffer
-function flex.ui.init.statsMenu(db, buf, win_width) end
+function flex.ui.init.statsMenu(db, buf, win_width, opts) end
+
+---@class flex.ui.init.statsMenuOpts
+---@field indentDriftForIcon integer? default value is 2
 
 ---@param opts flex.ui.init.showUIOpts?
 ---opens the ui

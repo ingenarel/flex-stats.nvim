@@ -3,8 +3,9 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
-function m.statsMenu(db, buf, win_width)
-    local INDENT_DRIFT_FOR_ICON = 2
+function m.statsMenu(db, buf, win_width, opts)
+    opts = opts or {}
+    opts.indentDriftForIcon = opts.indentDriftForIcon or 2
     local lines = {}
     local fileData = {}
     db = vim.deepcopy(db)
@@ -46,7 +47,7 @@ function m.statsMenu(db, buf, win_width)
                 maxWidth = #fileData[i][j]
             end
         end
-        table.insert(lines, utils.center(fileData[i][1], maxWidth + INDENT_DRIFT_FOR_ICON))
+        table.insert(lines, utils.center(fileData[i][1], maxWidth + opts.indentDriftForIcon))
         for j = 2, #fileData[i] do
             table.insert(lines, utils.center(fileData[i][j], maxWidth))
         end
