@@ -3,7 +3,7 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
-function m.statsMenu(db, buf, win_width, opts)
+function m.fileStatsMenu(db, buf, win_width, opts)
     opts = opts or {}
     opts.indentDriftForIcon = opts.indentDriftForIcon or 2
     opts.gap = opts.gap or 5
@@ -16,13 +16,13 @@ function m.statsMenu(db, buf, win_width, opts)
     db.mason = nil
     db.metapack = nil
     db.checkhealth = nil
-    db = utils.statsMenu1stPass(db)
+    db = utils.fileStatsMenu1stPass(db)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    db = utils.statsMenu2ndPass(db, win_width, opts)
-    db = utils.statsMenu3rdPass(db)
-    db = utils.statsMenu4thPass(db, win_width, opts)
+    db = utils.fileStatsMenu2ndPass(db, win_width, opts)
+    db = utils.fileStatsMenu3rdPass(db)
+    db = utils.fileStatsMenu4thPass(db, win_width, opts)
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
@@ -53,7 +53,7 @@ function m.showUI(opts)
     db[""] = nil
     vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
-    m.statsMenu(db, bufID, win_width)
+    m.fileStatsMenu(db, bufID, win_width)
 end
 
 return m

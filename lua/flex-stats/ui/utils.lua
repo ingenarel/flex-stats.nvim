@@ -33,7 +33,7 @@ function m.center(input, width, char)
     return indent .. input .. string.rep(char, width - #indent - #input)
 end
 
-function m.statsMenu1stPass(db)
+function m.fileStatsMenu1stPass(db)
     local fp = {}
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
@@ -58,7 +58,7 @@ function m.statsMenu1stPass(db)
     return fp
 end
 
-function m.statsMenu2ndPass(db, win_width, opts)
+function m.fileStatsMenu2ndPass(db, win_width, opts)
     local sp = {}
     local i = 1
     while i <= #db do
@@ -105,7 +105,7 @@ function m.statsMenu2ndPass(db, win_width, opts)
     return sp
 end
 
-function m.statsMenu3rdPass(db)
+function m.fileStatsMenu3rdPass(db)
     local lines = {}
     for x = 1, #db do
         local tempLineNum = 1
@@ -122,7 +122,7 @@ function m.statsMenu3rdPass(db)
     return lines
 end
 
-function m.statsMenu4thPass(db, win_width, opts)
+function m.fileStatsMenu4thPass(db, win_width, opts)
     local lines = {}
     for x = 1, #db do
         for y = 1, #db[x] do
