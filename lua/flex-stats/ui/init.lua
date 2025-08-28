@@ -70,6 +70,7 @@ local function statsMenuSecondPass(db, win_width, opts)
             end
             i = i + 1
         end
+        i = i + 1
     end
     return sp
 end
