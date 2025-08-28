@@ -82,9 +82,10 @@ local function statsMenuThirdPass(db, opts)
         ---@diagnostic disable-next-line: unused-local
         for y = 1, #db[x][1] do
             local line = ""
-            for z = 1, #db[x] do
-                line = line .. string.rep(" ", opts.gap) .. (db[x][z][tempLineNum] or "")
+            for z = 1, #db[x] - 1 do
+                line = line .. (db[x][z][tempLineNum] or "") .. string.rep(" ", opts.gap)
             end
+            line = line .. (db[x][#db[x]][tempLineNum] or "")
             table.insert(lines, line)
             tempLineNum = tempLineNum + 1
         end
