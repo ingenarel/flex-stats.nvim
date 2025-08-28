@@ -6,8 +6,10 @@ local utils = require("flex-stats.ui.utils")
 function m.statsMenu(db, buf, win_width, opts)
     opts = opts or {}
     opts.indentDriftForIcon = opts.indentDriftForIcon or 2
+    opts.gap = opts.gap or 5
     local lines = {}
-    local fileData = {}
+    local firstPass = {}
+    local secondPass = {}
     db = vim.deepcopy(db)
     db.noice = nil
     db.TelescopePrompt = nil
@@ -21,35 +23,86 @@ function m.statsMenu(db, buf, win_width, opts)
         local editing = data["editTotalTime"] or 0
         local total = moving + editing
         if total > 0 then
-            table.insert(fileData, {})
+            table.insert(firstPass, {})
             table.insert(
-                fileData[#fileData],
+                firstPass[#firstPass],
                 (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang
             )
-            table.insert(fileData[#fileData], "total: " .. utils.time(total))
+            table.insert(firstPass[#firstPass], "total: " .. utils.time(total))
             if editing > 0 then
-                table.insert(fileData[#fileData], "editing: " .. utils.time(editing))
+                table.insert(firstPass[#firstPass], "editing: " .. utils.time(editing))
             end
             if moving > 0 then
-                table.insert(fileData[#fileData], "moving: " .. utils.time(moving))
+                table.insert(firstPass[#firstPass], "moving: " .. utils.time(moving))
             end
-            table.insert(fileData[#fileData], "")
-            fileData[#fileData].totalTime = total
+            for _ = #firstPass[#firstPass], 4 do
+                table.insert(firstPass[#firstPass], "")
+            end
+            firstPass[#firstPass].totalTime = total
         end
     end
-    table.sort(fileData, function(element1, element2)
+    table.sort(firstPass, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    for i = 1, #fileData do
+    local i = 1
+    while i <= #firstPass do
         local maxWidth = 0
-        for j = 1, #fileData[i] do
-            if #fileData[i][j] > maxWidth then
-                maxWidth = #fileData[i][j]
+        for j = 1, #firstPass[i] do
+            if #firstPass[i][j] > maxWidth then
+                maxWidth = #firstPass[i][j]
             end
         end
-        table.insert(lines, utils.center(fileData[i][1], maxWidth + opts.indentDriftForIcon))
-        for j = 2, #fileData[i] do
-            table.insert(lines, utils.center(fileData[i][j], maxWidth))
+        table.insert(secondPass, {})
+        table.insert(secondPass[#secondPass], {})
+        table.insert(
+            secondPass[#secondPass][#secondPass[#secondPass]],
+            utils.center(firstPass[i][1], maxWidth + opts.indentDriftForIcon)
+        )
+        for j = 2, #firstPass[i] do
+            table.insert(secondPass[#secondPass][#secondPass[#secondPass]], utils.center(firstPass[i][j], maxWidth))
+        end
+        while i + 1 <= #firstPass do
+            local tmp = i + 1
+            local nextMaxWidth = 0
+            for j = 1, #firstPass[tmp] do
+                if #firstPass[tmp][j] > nextMaxWidth then
+                    nextMaxWidth = #firstPass[tmp][j]
+                end
+            end
+            local secondPassLastConcatantedLen = 0
+            for p = 1, #secondPass[#secondPass] do
+                secondPassLastConcatantedLen = secondPassLastConcatantedLen + #secondPass[#secondPass][p][1] + opts.gap
+            end
+            if secondPassLastConcatantedLen + nextMaxWidth < win_width then
+                i = tmp
+                table.insert(secondPass[#secondPass], {})
+                table.insert(
+                    secondPass[#secondPass][#secondPass[#secondPass]],
+                    utils.center(firstPass[i][1], nextMaxWidth + opts.indentDriftForIcon)
+                )
+                for line = 2, #firstPass[i] do
+                    table.insert(
+                        secondPass[#secondPass][#secondPass[#secondPass]],
+                        utils.center(firstPass[i][line], nextMaxWidth)
+                    )
+                end
+                i = i + 1
+            else
+                break
+            end
+        end
+    end
+    firstPass = nil
+    for x = 1, #secondPass do
+        local tempLineNum = 1
+        ---@diagnostic disable-next-line: unused-local
+        for y = 1, #secondPass[x][1] do
+            local line = ""
+            for z = 1, #secondPass[x] do
+                line = line .. string.rep(" ", opts.gap) .. (secondPass[x][z][tempLineNum] or "")
+            end
+            table.insert(lines, line)
+            tempLineNum = tempLineNum + 1
         end
     end
     vim.bo[buf].modifiable = true

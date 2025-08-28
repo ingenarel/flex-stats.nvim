@@ -111,6 +111,7 @@ function flex.ui.init.statsMenu(db, buf, win_width, opts) end
 
 ---@class flex.ui.init.statsMenuOpts
 ---@field indentDriftForIcon integer? default value is 2
+---@field gap integer? default value is 2
 
 ---@param opts flex.ui.init.showUIOpts?
 ---opens the ui
