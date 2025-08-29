@@ -46,7 +46,9 @@ function m.showUI(opts)
     db[""] = nil
     vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
-    m.fileStatsMenu(db, bufID, win_width)
+    vim.schedule(function()
+        m.fileStatsMenu(db, bufID, win_width)
+    end)
 end
 
 return m

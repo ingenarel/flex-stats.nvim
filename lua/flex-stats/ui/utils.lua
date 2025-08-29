@@ -41,7 +41,16 @@ function m.fileStatsMenu1stPass(db)
         local total = moving + editing
         if total > 0 then
             table.insert(fp, {})
-            table.insert(fp[#fp], (require("nvim-web-devicons").get_icon_by_filetype(lang) or "") .. " " .. lang)
+            local fileName, highlightGroup = require("nvim-web-devicons").get_icon_by_filetype(lang)
+            if not fileName then
+                fileName = ""
+            end
+            if highlightGroup then
+                vim.schedule(function()
+                    vim.fn.matchadd(highlightGroup, fileName .. " " .. lang)
+                end)
+            end
+            table.insert(fp[#fp], fileName .. " " .. lang)
             table.insert(fp[#fp], "total: " .. m.time(total))
             if editing > 0 then
                 table.insert(fp[#fp], "editing: " .. m.time(editing))
