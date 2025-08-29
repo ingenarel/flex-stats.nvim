@@ -24,6 +24,7 @@ function m.setup(opts)
     opts = vim.tbl_deep_extend("force", m.setupOpts, opts)
     m.setupOpts = opts
     m.database = db.readDataBase()
+    opts.nsID = opts.nsID or vim.api.nvim_create_namespace("FlexStats")
     require("flex-stats.core.autocmds")
     vim.api.nvim_create_user_command("Flex", function()
         m.showStats()
@@ -32,7 +33,7 @@ end
 
 function m.showStats()
     db.writeDataBase(m.database)
-    require("flex-stats.ui").showUI()
+    require("flex-stats.ui").showUI { nsID = m.setupOpts.nsID }
 end
 
 return m

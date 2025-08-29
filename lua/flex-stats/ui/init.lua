@@ -46,10 +46,9 @@ function m.showUI(opts)
     db[""] = nil
     vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
-    local nsID = vim.api.nvim_create_namespace("FlexStats")
-    vim.api.nvim_win_set_hl_ns(winID, nsID)
+    vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
     vim.schedule(function()
-        m.fileStatsMenu(db, bufID, win_width, nsID)
+        m.fileStatsMenu(db, bufID, win_width, opts.nsID)
     end)
 end
 

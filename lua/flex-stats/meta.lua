@@ -86,6 +86,7 @@ function flex.init.setup(opts) end
 ---@field indentDriftForIcon integer the indent drift for icons
 ---@field gap integer the minimum gap for the file UI
 ---@field fileStatsGradientMax integer
+---@field nsID integer?
 
 ---to show the stats
 function flex.init.showStats() end
@@ -124,6 +125,7 @@ function flex.ui.init.showUI(opts) end
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80
+---@field nsID integer
 
 ---@class flex.ui.utils
 flex.ui.utils = {}
