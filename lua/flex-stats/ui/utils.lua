@@ -1,29 +1,14 @@
 ---@type flex.ui.utils
 local m = {}
 
-local function colorSteps(steps, negative)
-    local colors = {}
-    local start = 0
-    local stop = 255
-    local actualSteps = math.floor(256 / steps)
-    if negative then
-        start = 255
-        stop = 0
-        actualSteps = -math.floor(256 / steps)
+function m.getColor(steps, input)
+    if steps / input > 2 then
+        return bit.tohex(256 / ((steps / 2) / input), 2) .. "ff00"
+    elseif steps / input == 2 then
+        return "ffff00"
+    else
+        return "ff" .. bit.tohex(256 - (256 / ((steps / 2) / input)), 2) .. "00"
     end
-    for color = start, stop, actualSteps do
-        table.insert(colors, color)
-    end
-    return colors
-end
-
-local steps = 100
-local colors = {}
-for _, value in ipairs(colorSteps(steps / 2)) do
-    table.insert(colors, bit.tohex(value, 2) .. "ff00")
-end
-for _, value in ipairs(colorSteps(steps / 2, true)) do
-    table.insert(colors, "ff" .. bit.tohex(value, 2) .. "00")
 end
 
 function m.time(seconds)
@@ -59,7 +44,7 @@ function m.center(input, width, char)
 end
 
 function m.colorString(regex, hexColor, nsID)
-    vim.api.nvim_set_hl(nsID, hexColor, { fg = "#" .. hexColor, underline = true })
+    vim.api.nvim_set_hl(nsID, hexColor, { fg = "#" .. hexColor })
     vim.fn.matchadd(hexColor, regex)
 end
 
@@ -79,21 +64,23 @@ function m.fileStatsMenu1stPass(db, nsID)
 
             local fileNameString = fileName .. " " .. lang
             table.insert(fp[#fp], fileNameString)
-            m.colorString(fileNameString, string.gsub(color, "#", ""), nsID)
+            color = string.gsub(color, "#", "")
+            vim.api.nvim_set_hl(nsID, color, { fg = "#" .. color, underline = true })
+            vim.fn.matchadd(color, fileNameString)
 
             local totalString = "Total: " .. m.time(total)
             table.insert(fp[#fp], totalString)
-            m.colorString(totalString, colors[math.ceil(total / 3600)] or "ff0000", nsID)
+            m.colorString(totalString, m.getColor(100, total / 3600), nsID)
 
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
                 table.insert(fp[#fp], editString)
-                m.colorString(editString, colors[math.ceil(editing / 3600)] or "ff0000", nsID)
+                m.colorString(editString, m.getColor(100, editing / 3600), nsID)
             end
             if moving > 0 then
                 local moveString = "Moving: " .. m.time(moving)
                 table.insert(fp[#fp], moveString)
-                m.colorString(moveString, colors[math.ceil(moving / 3600)] or "ff0000", nsID)
+                m.colorString(moveString, m.getColor(100, moving / 3600), nsID)
             end
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")
