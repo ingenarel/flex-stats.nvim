@@ -16,6 +16,7 @@ local function colorSteps(steps, negative)
     end
     return colors
 end
+
 local steps = 100
 local colors = {}
 for _, value in ipairs(colorSteps(steps / 2)) do
@@ -57,6 +58,11 @@ function m.center(input, width, char)
     return indent .. input .. string.rep(char, width - #indent - #input)
 end
 
+function m.colorString(regex, hexColor, nsID)
+    vim.api.nvim_set_hl(nsID, hexColor, { fg = "#" .. hexColor, underline = true })
+    vim.fn.matchadd(hexColor, regex)
+end
+
 function m.fileStatsMenu1stPass(db, nsID)
     local fp = {}
     for lang, data in pairs(db) do
@@ -71,32 +77,23 @@ function m.fileStatsMenu1stPass(db, nsID)
                 color = "#939393"
             end
 
-            --TODO: make a better option
-            local highlightName = "Flex" .. string.gsub(color, "#", "")
-            vim.api.nvim_set_hl(nsID, highlightName, { fg = color, underline = true })
-            vim.fn.matchadd(highlightName, fileName .. " " .. lang)
-
-            table.insert(fp[#fp], fileName .. " " .. lang)
+            local fileNameString = fileName .. " " .. lang
+            table.insert(fp[#fp], fileNameString)
+            m.colorString(fileNameString, string.gsub(color, "#", ""), nsID)
 
             local totalString = "Total: " .. m.time(total)
             table.insert(fp[#fp], totalString)
-            local totalColor = colors[math.ceil(total / 3600)] or "ff0000"
-            vim.api.nvim_set_hl(nsID, totalColor, { fg = "#" .. totalColor })
-            vim.fn.matchadd(totalColor, totalString)
+            m.colorString(totalString, colors[math.ceil(total / 3600)] or "ff0000", nsID)
 
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
                 table.insert(fp[#fp], editString)
-                local editColor = colors[math.ceil(editing / 3600)] or "ff0000"
-                vim.api.nvim_set_hl(nsID, editColor, { fg = "#" .. editColor })
-                vim.fn.matchadd(editColor, editString)
+                m.colorString(editString, colors[math.ceil(editing / 3600)] or "ff0000", nsID)
             end
             if moving > 0 then
                 local moveString = "Moving: " .. m.time(moving)
                 table.insert(fp[#fp], moveString)
-                local moveColor = colors[math.ceil(moving / 3600)] or "ff0000"
-                vim.api.nvim_set_hl(nsID, moveColor, { fg = "#" .. moveColor })
-                vim.fn.matchadd(moveColor, moveString)
+                m.colorString(moveString, colors[math.ceil(moving / 3600)] or "ff0000", nsID)
             end
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")

@@ -172,3 +172,8 @@ function flex.ui.utils.fileStatsMenu3rdPass(db) end
 ---@return string[]
 ---@nodiscard
 function flex.ui.utils.fileStatsMenu4thPass(db, win_width, indentDriftForIcon) end
+
+---@param regex string
+---@param hexColor string
+---@param nsID integer
+function flex.ui.utils.colorString(regex, hexColor, nsID) end
