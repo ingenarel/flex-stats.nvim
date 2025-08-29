@@ -1,5 +1,30 @@
 ---@type flex.ui.utils
 local m = {}
+
+local function colorSteps(steps, negative)
+    local colors = {}
+    local start = 0
+    local stop = 255
+    local actualSteps = math.floor(256 / steps)
+    if negative then
+        start = 255
+        stop = 0
+        actualSteps = -math.floor(256 / steps)
+    end
+    for color = start, stop, actualSteps do
+        table.insert(colors, color)
+    end
+    return colors
+end
+local steps = 100
+local colors = {}
+for _, value in ipairs(colorSteps(steps / 2)) do
+    table.insert(colors, bit.tohex(value, 2) .. "ff00")
+end
+for _, value in ipairs(colorSteps(steps / 2, true)) do
+    table.insert(colors, "ff" .. bit.tohex(value, 2) .. "00")
+end
+
 function m.time(seconds)
     local minutes = 0
     local hours = 0
@@ -23,7 +48,6 @@ function m.time(seconds)
     if hours > 0 then
         returnString = hours .. " hours " .. returnString
     end
-
     return returnString
 end
 
@@ -46,18 +70,33 @@ function m.fileStatsMenu1stPass(db, nsID)
                 fileName = ""
                 color = "#939393"
             end
+
+            --TODO: make a better option
             local highlightName = "Flex" .. string.gsub(color, "#", "")
             vim.api.nvim_set_hl(nsID, highlightName, { fg = color, underline = true })
-            vim.schedule(function()
-                vim.fn.matchadd(highlightName, fileName .. " " .. lang)
-            end)
+            vim.fn.matchadd(highlightName, fileName .. " " .. lang)
+
             table.insert(fp[#fp], fileName .. " " .. lang)
-            table.insert(fp[#fp], "Total: " .. m.time(total))
+
+            local totalString = "Total: " .. m.time(total)
+            table.insert(fp[#fp], totalString)
+            local totalColor = colors[math.ceil(total / (60 * 60))] or "ff0000"
+            vim.api.nvim_set_hl(nsID, totalColor, { fg = "#" .. totalColor })
+            vim.fn.matchadd(totalColor, totalString)
+
             if editing > 0 then
-                table.insert(fp[#fp], "Editing: " .. m.time(editing))
+                local editString = "Editing: " .. m.time(editing)
+                table.insert(fp[#fp], editString)
+                local editColor = colors[math.ceil(total / (60 * 60))] or "ff0000"
+                vim.api.nvim_set_hl(nsID, editColor, { fg = "#" .. editColor })
+                vim.fn.matchadd(editColor, editString)
             end
             if moving > 0 then
-                table.insert(fp[#fp], "Moving: " .. m.time(moving))
+                local moveString = "Moving: " .. m.time(moving)
+                table.insert(fp[#fp], moveString)
+                local moveColor = colors[math.ceil(total / (60 * 60))] or "ff0000"
+                vim.api.nvim_set_hl(nsID, moveColor, { fg = "#" .. moveColor })
+                vim.fn.matchadd(moveColor, moveString)
             end
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")
