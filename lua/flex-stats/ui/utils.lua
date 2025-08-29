@@ -52,12 +52,12 @@ function m.fileStatsMenu1stPass(db, nsID)
                 vim.fn.matchadd(highlightName, fileName .. " " .. lang)
             end)
             table.insert(fp[#fp], fileName .. " " .. lang)
-            table.insert(fp[#fp], "total: " .. m.time(total))
+            table.insert(fp[#fp], "Total: " .. m.time(total))
             if editing > 0 then
-                table.insert(fp[#fp], "editing: " .. m.time(editing))
+                table.insert(fp[#fp], "Editing: " .. m.time(editing))
             end
             if moving > 0 then
-                table.insert(fp[#fp], "moving: " .. m.time(moving))
+                table.insert(fp[#fp], "Moving: " .. m.time(moving))
             end
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")
