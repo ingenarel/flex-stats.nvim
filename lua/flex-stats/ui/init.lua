@@ -8,14 +8,10 @@ function m.fileStatsMenu(db, buf, win_width, opts)
     opts.indentDriftForIcon = opts.indentDriftForIcon or 2
     opts.gap = opts.gap or 5
     db = vim.deepcopy(db)
-    db.noice = nil
-    db.TelescopePrompt = nil
-    db.notify = nil
-    db.lazy = nil
-    db.flexstats = nil
-    db.mason = nil
-    db.metapack = nil
-    db.checkhealth = nil
+    local setupOpts = require("flex-stats").setupOpts
+    for i = 1, #setupOpts.noShow do
+        db[setupOpts.noShow[i]] = nil
+    end
     db = utils.fileStatsMenu1stPass(db)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)

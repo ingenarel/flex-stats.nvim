@@ -71,13 +71,18 @@ function flex.utils.migrate(oldName, newName) end
 
 ---module containing the init functions
 ---@class flex.init
+---@field setupOpts flex.init.setupOpts
 flex.init = {}
 
 ---@type flex.database
 flex.init.database = {}
 
+---@param opts flex.init.setupOpts
 ---the setup function
-function flex.init.setup() end
+function flex.init.setup(opts) end
+
+---@class flex.init.setupOpts
+---@field noShow string[]? list of filetypes to not show in the ui
 
 ---to show the stats
 function flex.init.showStats() end
