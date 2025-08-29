@@ -11,6 +11,8 @@ local m = {
             "metapack",
             "checkhealth",
         },
+        indentDriftForIcon = 2,
+        gap = 5,
     },
 }
 

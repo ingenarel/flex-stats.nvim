@@ -3,12 +3,9 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
-function m.fileStatsMenu(db, buf, win_width, opts)
-    opts = opts or {}
-    opts.indentDriftForIcon = opts.indentDriftForIcon or 2
-    opts.gap = opts.gap or 5
-    db = vim.deepcopy(db)
+function m.fileStatsMenu(db, buf, win_width)
     local setupOpts = require("flex-stats").setupOpts
+    db = vim.deepcopy(db)
     for i = 1, #setupOpts.noShow do
         db[setupOpts.noShow[i]] = nil
     end
@@ -16,9 +13,9 @@ function m.fileStatsMenu(db, buf, win_width, opts)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
-    db = utils.fileStatsMenu2ndPass(db, win_width, opts)
+    db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
     db = utils.fileStatsMenu3rdPass(db)
-    db = utils.fileStatsMenu4thPass(db, win_width, opts.indentDriftForIcon)
+    db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false

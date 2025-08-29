@@ -83,6 +83,8 @@ function flex.init.setup(opts) end
 
 ---@class flex.init.setupOpts
 ---@field noShow string[]? list of filetypes to not show in the ui
+---@field indentDriftForIcon integer the indent drift for icons
+---@field gap integer the minimum gap for the file UI
 
 ---to show the stats
 function flex.init.showStats() end
@@ -110,13 +112,8 @@ flex.ui.init = {}
 ---@param db flex.database
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
----@param opts flex.ui.init.fileStatsMenuOpts? optional args
 ---shows the stats menu on a buffer
-function flex.ui.init.fileStatsMenu(db, buf, win_width, opts) end
-
----@class flex.ui.init.fileStatsMenuOpts
----@field indentDriftForIcon integer? indent drift for icons
----@field gap integer?
+function flex.ui.init.fileStatsMenu(db, buf, win_width) end
 
 ---@param opts flex.ui.init.showUIOpts?
 ---opens the ui
@@ -156,10 +153,11 @@ function flex.ui.utils.fileStatsMenu1stPass(db) end
 
 ---@param db flex.ui.utils.fileStatsMenu1stPassReturn[]
 ---@param win_width integer the window width
----@param opts flex.ui.init.fileStatsMenuOpts optional args
+---@param indentDriftForIcon integer
+---@param gap integer
 ---@return string[][][]
 ---@nodiscard
-function flex.ui.utils.fileStatsMenu2ndPass(db, win_width, opts) end
+function flex.ui.utils.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap) end
 
 ---@param db string[][][]
 ---@return string[][][]

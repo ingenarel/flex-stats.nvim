@@ -58,7 +58,7 @@ function m.fileStatsMenu1stPass(db)
     return fp
 end
 
-function m.fileStatsMenu2ndPass(db, win_width, opts)
+function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
     local sp = {}
     local i = 1
     while i <= #db do
@@ -70,7 +70,7 @@ function m.fileStatsMenu2ndPass(db, win_width, opts)
         end
         table.insert(sp, {})
         table.insert(sp[#sp], {})
-        table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], maxWidth + opts.indentDriftForIcon))
+        table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], maxWidth + indentDriftForIcon))
         for j = 2, #db[i] do
             table.insert(sp[#sp][#sp[#sp]], m.center(db[i][j], maxWidth))
         end
@@ -86,12 +86,12 @@ function m.fileStatsMenu2ndPass(db, win_width, opts)
             for secondPassLastConcatantedLenLoopJ = 1, #sp[#sp] do
                 secondPassLastConcatantedLen = secondPassLastConcatantedLen
                     + #sp[#sp][secondPassLastConcatantedLenLoopJ][1]
-                    + opts.gap
+                    + gap
             end
             if secondPassLastConcatantedLen + nextMaxWidth < win_width then
                 i = tmp
                 table.insert(sp[#sp], {})
-                table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], nextMaxWidth + opts.indentDriftForIcon))
+                table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], nextMaxWidth + indentDriftForIcon))
                 for line = 2, #db[i] do
                     table.insert(sp[#sp][#sp[#sp]], m.center(db[i][line], nextMaxWidth))
                 end
