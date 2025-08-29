@@ -33,7 +33,7 @@ function m.center(input, width, char)
     return indent .. input .. string.rep(char, width - #indent - #input)
 end
 
-function m.fileStatsMenu1stPass(db)
+function m.fileStatsMenu1stPass(db, nsID)
     local fp = {}
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
@@ -41,15 +41,16 @@ function m.fileStatsMenu1stPass(db)
         local total = moving + editing
         if total > 0 then
             table.insert(fp, {})
-            local fileName, highlightGroup = require("nvim-web-devicons").get_icon_by_filetype(lang)
+            local fileName, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
             if not fileName then
                 fileName = ""
+                color = "#939393"
             end
-            if highlightGroup then
-                vim.schedule(function()
-                    vim.fn.matchadd(highlightGroup, fileName .. " " .. lang)
-                end)
-            end
+            local highlightName = "Flex" .. string.gsub(color, "#", "")
+            vim.api.nvim_set_hl(nsID, highlightName, { fg = color, underline = true })
+            vim.schedule(function()
+                vim.fn.matchadd(highlightName, fileName .. " " .. lang)
+            end)
             table.insert(fp[#fp], fileName .. " " .. lang)
             table.insert(fp[#fp], "total: " .. m.time(total))
             if editing > 0 then

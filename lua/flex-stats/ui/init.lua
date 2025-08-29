@@ -3,13 +3,13 @@ local m = {}
 
 local utils = require("flex-stats.ui.utils")
 
-function m.fileStatsMenu(db, buf, win_width)
+function m.fileStatsMenu(db, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     db = vim.deepcopy(db)
     for i = 1, #setupOpts.noShow do
         db[setupOpts.noShow[i]] = nil
     end
-    db = utils.fileStatsMenu1stPass(db)
+    db = utils.fileStatsMenu1stPass(db, nsID)
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
@@ -32,7 +32,7 @@ function m.showUI(opts)
     local win_height = math.floor(vim.o.lines / 100 * opts.height)
     ---@type integer
     local bufID = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_open_win(bufID, true, {
+    local winID = vim.api.nvim_open_win(bufID, true, {
         relative = "editor",
         width = win_width,
         height = win_height,
@@ -46,8 +46,10 @@ function m.showUI(opts)
     db[""] = nil
     vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
+    local nsID = vim.api.nvim_create_namespace("FlexStats")
+    vim.api.nvim_win_set_hl_ns(winID, nsID)
     vim.schedule(function()
-        m.fileStatsMenu(db, bufID, win_width)
+        m.fileStatsMenu(db, bufID, win_width, nsID)
     end)
 end
 

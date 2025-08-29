@@ -112,8 +112,9 @@ flex.ui.init = {}
 ---@param db flex.database
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
+---@param nsID integer the nsid of the color namespace for flexstats
 ---shows the stats menu on a buffer
-function flex.ui.init.fileStatsMenu(db, buf, win_width) end
+function flex.ui.init.fileStatsMenu(db, buf, win_width, nsID) end
 
 ---@param opts flex.ui.init.showUIOpts?
 ---opens the ui
@@ -139,8 +140,9 @@ function flex.ui.utils.center(input, width, char) end
 
 ---@param db flex.database
 ---@return flex.ui.utils.fileStatsMenu1stPassReturn[]
+---@param nsID integer the nsid of the color namespace for flexstats
 ---@nodiscard
-function flex.ui.utils.fileStatsMenu1stPass(db) end
+function flex.ui.utils.fileStatsMenu1stPass(db, nsID) end
 
 ---@class flex.ui.utils.fileStatsMenu1stPassReturn
 ---@field [1] string file icon and name
