@@ -87,14 +87,14 @@ function m.fileStatsMenu1stPass(db, nsID)
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
                 table.insert(fp[#fp], editString)
-                local editColor = colors[math.ceil(total / (60 * 60))] or "ff0000"
+                local editColor = colors[math.ceil(editing / (60 * 60))] or "ff0000"
                 vim.api.nvim_set_hl(nsID, editColor, { fg = "#" .. editColor })
                 vim.fn.matchadd(editColor, editString)
             end
             if moving > 0 then
                 local moveString = "Moving: " .. m.time(moving)
                 table.insert(fp[#fp], moveString)
-                local moveColor = colors[math.ceil(total / (60 * 60))] or "ff0000"
+                local moveColor = colors[math.ceil(moving / (60 * 60))] or "ff0000"
                 vim.api.nvim_set_hl(nsID, moveColor, { fg = "#" .. moveColor })
                 vim.fn.matchadd(moveColor, moveString)
             end
