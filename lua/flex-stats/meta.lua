@@ -177,3 +177,8 @@ function flex.ui.utils.fileStatsMenu4thPass(db, win_width, indentDriftForIcon) e
 ---@param hexColor string
 ---@param nsID integer
 function flex.ui.utils.colorString(regex, hexColor, nsID) end
+
+---@param steps number
+---@param input number
+---@return string hexcode
+function flex.ui.utils.getColor(steps, input) end
