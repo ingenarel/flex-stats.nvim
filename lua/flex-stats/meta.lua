@@ -85,6 +85,7 @@ function flex.init.setup(opts) end
 ---@field noShow string[]? list of filetypes to not show in the ui
 ---@field indentDriftForIcon integer the indent drift for icons
 ---@field gap integer the minimum gap for the file UI
+---@field fileStatsGradientMax integer
 
 ---to show the stats
 function flex.init.showStats() end

@@ -49,6 +49,7 @@ function m.colorString(regex, hexColor, nsID)
 end
 
 function m.fileStatsMenu1stPass(db, nsID)
+    local setupOpts = require("flex-stats").setupOpts
     local fp = {}
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
@@ -70,17 +71,17 @@ function m.fileStatsMenu1stPass(db, nsID)
 
             local totalString = "Total: " .. m.time(total)
             table.insert(fp[#fp], totalString)
-            m.colorString(totalString, m.getColor(100, total / 3600), nsID)
+            m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, total), nsID)
 
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
                 table.insert(fp[#fp], editString)
-                m.colorString(editString, m.getColor(100, editing / 3600), nsID)
+                m.colorString(editString, m.getColor(setupOpts.fileStatsGradientMax, editing), nsID)
             end
             if moving > 0 then
                 local moveString = "Moving: " .. m.time(moving)
                 table.insert(fp[#fp], moveString)
-                m.colorString(moveString, m.getColor(100, moving / 3600), nsID)
+                m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, moving), nsID)
             end
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")

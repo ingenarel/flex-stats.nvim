@@ -14,6 +14,7 @@ local m = {
         },
         indentDriftForIcon = 2,
         gap = 5,
+        fileStatsGradientMax = 360000,
     },
 }
 
