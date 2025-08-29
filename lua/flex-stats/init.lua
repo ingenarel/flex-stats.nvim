@@ -10,6 +10,7 @@ local m = {
             "mason",
             "metapack",
             "checkhealth",
+            "typr",
         },
         indentDriftForIcon = 2,
         gap = 5,
