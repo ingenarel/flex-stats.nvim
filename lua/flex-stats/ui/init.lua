@@ -44,12 +44,25 @@ function m.showUI(opts)
     vim.bo[bufID].filetype = "flexstats"
     local db = require("flex-stats").database
     db[""] = nil
-    vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
-    vim.keymap.set("n", "q", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
     vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
     vim.schedule(function()
         m.fileStatsMenu(db, bufID, win_width, opts.nsID)
     end)
+    local autocmdID = {}
+    autocmdID[1] = vim.api.nvim_create_autocmd("VimResized", {
+        callback = function()
+            vim.api.nvim_del_autocmd(autocmdID[1])
+            vim.cmd.q()
+            vim.schedule(function()
+                m.showUI(opts)
+            end)
+        end,
+    })
+    vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "q", function()
+        vim.api.nvim_del_autocmd(autocmdID[1])
+        vim.cmd.q()
+    end, { noremap = true, silent = true, buffer = true })
 end
 
 return m
