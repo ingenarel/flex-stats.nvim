@@ -160,22 +160,23 @@ function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
     local lines = {}
     for x = 1, #db do
         for y = 1, #db[x] do
-            local gap = 0
+            local len = 0
             local z = 1
             while z <= #db[x][y] do
-                gap = gap + #db[x][y][z]
+                len = len + #db[x][y][z]
                 z = z + 1
             end
             if y == 1 then
-                gap = gap - indentDriftForIcon * (z - 1)
+                len = len - indentDriftForIcon * (z - 1)
             end
-            gap = math.floor((win_width - gap) / z + 1)
-            local line = ""
-            ---@diagnostic disable-next-line: redefined-local
-            for z = 1, #db[x][y] do
-                line = line .. string.rep(" ", gap) .. db[x][y][z]
+            local gap = math.floor((win_width - len) / (z - 2))
+            local line = db[x][y][1] .. string.rep(" ", gap)
+            z = 2
+            while z < #db[x][y] do
+                line = line .. db[x][y][z] .. string.rep(" ", gap)
                 z = z + 1
             end
+            line = line .. db[x][y][z]
             table.insert(lines, line)
         end
     end
