@@ -185,3 +185,12 @@ function flex.ui.utils.colorString(regex, hexColor, nsID) end
 ---@param input number
 ---@return string hexcode
 function flex.ui.utils.getColor(steps, input) end
+
+---@class flex.lock
+flex.lock = {}
+
+---create the lockfile
+function flex.lock.create() end
+
+---delete the lockfile
+function flex.lock.delete() end

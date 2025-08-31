@@ -1,5 +1,6 @@
 local timer = require("flex-stats.core.timer")
 local database = require("flex-stats").database
+local delete = require("flex-stats.core.lock").delete
 
 local function modeCheck()
     local currentMode = string.lower(vim.fn.mode())
@@ -65,5 +66,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
         require("flex-stats.core.db").writeDataBase(database)
+        delete()
     end,
 })
