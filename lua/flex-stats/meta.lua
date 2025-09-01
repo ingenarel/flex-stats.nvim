@@ -59,19 +59,19 @@ function flex.core.timer.endEditTime(filetype, database) end
 ---last time editing started to happen
 ---@field lastEditEnter integer?
 
----module containing some utility functions
----@class flex.core.utils
-flex.core.utils = {}
+---module containing migrating functions
+---@class flex.core.migrate
+flex.core.migrate = {}
 
 ---@param oldName string the old key to migrate from
 ---@param newName string the new key to migrate to
 ---a key migration function
 ---if the database is `{ lua = { a = 1}, ..}` and you
----want to change the name of `a` to `b`, do migrate("a", "b"), then the database
+---want to change the name of `a` to `b`, do keys("a", "b"), then the database
 ---should be `{ lua = { b = 1}, ..}` if the old one's value is a number, add the
 ---two values, if the old one's value is a table, use |vim.tbl_deep_extend()| to
 ---merge the two tables
-function flex.core.utils.migrate(oldName, newName) end
+function flex.core.migrate.keys(oldName, newName) end
 
 ---module containing the init functions
 ---@class flex.init

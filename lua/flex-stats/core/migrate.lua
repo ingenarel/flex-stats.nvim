@@ -1,7 +1,7 @@
----@type flex.core.utils
+---@type flex.core.migrate
 local m = {}
 
-function m.migrate(oldName, newName)
+function m.keys(oldName, newName)
     local database = require("flex-stats").database
     for lang, _ in pairs(database) do
         local oldNameType = type(database[lang][oldName])
