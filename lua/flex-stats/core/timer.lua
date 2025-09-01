@@ -1,4 +1,4 @@
----@type flex.timer
+---@type flex.core.timer
 local m = {}
 
 function m.filetypeSetup(filetype, database)

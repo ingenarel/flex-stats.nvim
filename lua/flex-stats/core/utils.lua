@@ -1,4 +1,4 @@
----@type flex.utils
+---@type flex.core.utils
 local m = {}
 
 function m.migrate(oldName, newName)

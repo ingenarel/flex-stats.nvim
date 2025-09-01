@@ -1,4 +1,4 @@
----@type flex.lock
+---@type flex.core.lock
 local m = {}
 
 function m.create()

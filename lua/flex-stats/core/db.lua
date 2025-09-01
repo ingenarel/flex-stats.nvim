@@ -1,4 +1,4 @@
----@type flex.db
+---@type flex.core.db
 local m = {}
 
 local timer = require("flex-stats.core.timer")
