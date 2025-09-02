@@ -132,7 +132,6 @@ function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
             else
                 break
             end
-            i = i + 1
         end
         i = i + 1
     end
