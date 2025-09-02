@@ -1,8 +1,8 @@
 ---@type flex.core.migrate
 local m = {}
 
-function m.keys(oldName, newName)
-    local database = require("flex-stats").database
+function m.keys(oldName, newName, database)
+    database = database or require("flex-stats").database
     for lang, _ in pairs(database) do
         local oldNameType = type(database[lang][oldName])
         if oldNameType == "nil" then

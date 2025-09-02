@@ -65,13 +65,14 @@ flex.core.migrate = {}
 
 ---@param oldName string the old key to migrate from
 ---@param newName string the new key to migrate to
+---@param database flex.database|table|nil optional database
 ---a key migration function
 ---if the database is `{ lua = { a = 1}, ..}` and you
 ---want to change the name of `a` to `b`, do keys("a", "b"), then the database
 ---should be `{ lua = { b = 1}, ..}` if the old one's value is a number, add the
 ---two values, if the old one's value is a table, use |vim.tbl_deep_extend()| to
 ---merge the two tables
-function flex.core.migrate.keys(oldName, newName) end
+function flex.core.migrate.keys(oldName, newName, database) end
 
 ---module containing the init functions
 ---@class flex.init
