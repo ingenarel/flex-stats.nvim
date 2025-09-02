@@ -1,6 +1,24 @@
 ---@type flex.core.migrate
 local m = {}
 
+function m.createRecursiveTableKeys(keys, tbl)
+    if #keys > 0 then
+        local key = keys[1]
+        if type(tbl[key]) ~= "table" then
+            tbl[key] = {}
+        end
+        table.remove(keys, 1)
+        if #keys > 0 then
+            local secondKey = keys[1]
+            table.remove(keys, 1)
+            if type(tbl[key][secondKey]) ~= "table" then
+                tbl[key][secondKey] = {}
+            end
+            m.createRecursiveTableKeys(keys, tbl[key][secondKey])
+        end
+    end
+end
+
 function m.keys(oldName, newName, database)
     database = database or require("flex-stats").database
     for lang, _ in pairs(database) do

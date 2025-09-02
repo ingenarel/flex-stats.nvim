@@ -74,6 +74,10 @@ flex.core.migrate = {}
 ---merge the two tables
 function flex.core.migrate.keys(oldName, newName, database) end
 
+---@param keys string[]
+---@param tbl table
+function flex.core.migrate.createRecursiveTableKeys(keys, tbl) end
+
 ---module containing the init functions
 ---@class flex.init
 ---@field setupOpts flex.init.setupOpts
