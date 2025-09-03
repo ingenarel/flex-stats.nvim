@@ -167,29 +167,60 @@ function m.fileStatsMenu3rdPass(db)
     return lines
 end
 
+function m.fileStatsMenu4thPassNoEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines)
+    for y = 1, #db[x] do
+        local len = 0
+        local z = 1
+        while z <= #db[x][y] do
+            len = len + #db[x][y][z]
+            z = z + 1
+        end
+        if y == 1 then
+            len = len - indentDriftForIcon * (z - 1)
+        end
+        local gap = math.floor((win_width - len) / (z - 2))
+        local line = db[x][y][1] .. string.rep(" ", gap)
+        z = 2
+        while z < #db[x][y] do
+            line = line .. db[x][y][z] .. string.rep(" ", gap)
+            z = z + 1
+        end
+        line = line .. (db[x][y][z] or "")
+        table.insert(lines, line)
+    end
+end
+
+function m.fileStatsMenu4thPassEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines)
+    for y = 1, #db[x] do
+        local len = 0
+        local z = 1
+        while z <= #db[x][y] do
+            len = len + #db[x][y][z]
+            z = z + 1
+        end
+        if y == 1 then
+            len = len - indentDriftForIcon * (z - 1)
+        end
+        local gap = math.floor((win_width - len) / z)
+        local line = ""
+        ---@diagnostic disable-next-line: redefined-local
+        for z = 1, #db[x][y] do
+            line = line .. string.rep(" ", gap) .. db[x][y][z]
+            z = z + 1
+        end
+        table.insert(lines, line)
+    end
+end
+
 function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
     local lines = {}
-    for x = 1, #db do
-        for y = 1, #db[x] do
-            local len = 0
-            local z = 1
-            while z <= #db[x][y] do
-                len = len + #db[x][y][z]
-                z = z + 1
-            end
-            if y == 1 then
-                len = len - indentDriftForIcon * (z - 1)
-            end
-            local gap = math.floor((win_width - len) / (z - 2))
-            local line = db[x][y][1] .. string.rep(" ", gap)
-            z = 2
-            while z < #db[x][y] do
-                line = line .. db[x][y][z] .. string.rep(" ", gap)
-                z = z + 1
-            end
-            line = line .. (db[x][y][z] or "")
-            table.insert(lines, line)
-        end
+    for x = 1, #db - 1 do
+        m.fileStatsMenu4thPassNoEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines)
+    end
+    if #db[#db][#db[#db]] > 2 then
+        m.fileStatsMenu4thPassNoEdgeGapEqualize(db, #db, indentDriftForIcon, win_width, lines)
+    else
+        m.fileStatsMenu4thPassEdgeGapEqualize(db, #db, indentDriftForIcon, win_width, lines)
     end
     return lines
 end
