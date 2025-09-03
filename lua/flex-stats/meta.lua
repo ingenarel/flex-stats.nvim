@@ -183,7 +183,7 @@ function flex.ui.utils.fileStatsMenu1stPass(db, nsID) end
 ---@field [4] string move info|edit info| nil
 ---@field [5] string empty line
 ---@field [6] string empty line
----@field totalTime integer total time in seconds
+---@field writingTime integer total time in seconds
 
 ---@param db flex.ui.utils.fileStatsMenu1stPassReturn[]
 ---@param win_width integer the window width

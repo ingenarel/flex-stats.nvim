@@ -11,7 +11,7 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     end
     db = utils.fileStatsMenu1stPass(db, nsID)
     table.sort(db, function(element1, element2)
-        return (element1.totalTime > element2.totalTime)
+        return (element1.writingTime > element2.writingTime)
     end)
     db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
     db = utils.fileStatsMenu3rdPass(db)

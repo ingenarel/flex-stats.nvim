@@ -54,8 +54,8 @@ function m.fileStatsMenu1stPass(db, nsID)
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
         local editing = data["editTotalTime"] or 0
-        local total = moving + editing
-        if total > 0 then
+        local writing = moving + editing
+        if writing > 0 then
             table.insert(fp, {})
             local fileName, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
             if not fileName then
@@ -69,9 +69,9 @@ function m.fileStatsMenu1stPass(db, nsID)
             vim.api.nvim_set_hl(nsID, color, { fg = "#" .. color, underline = true })
             vim.fn.matchadd(color, fileNameString)
 
-            local totalString = "Total: " .. m.time(total)
-            table.insert(fp[#fp], totalString)
-            m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, total), nsID)
+            local writingString = "Writing: " .. m.time(writing)
+            table.insert(fp[#fp], writingString)
+            m.colorString(writingString, m.getColor(setupOpts.fileStatsGradientMax, writing), nsID)
 
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
@@ -86,7 +86,7 @@ function m.fileStatsMenu1stPass(db, nsID)
             for _ = #fp[#fp], 5 do
                 table.insert(fp[#fp], "")
             end
-            fp[#fp].totalTime = total
+            fp[#fp].writingTime = writing
         end
     end
     return fp
