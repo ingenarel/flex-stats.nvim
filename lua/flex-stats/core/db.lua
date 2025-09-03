@@ -34,9 +34,9 @@ function m.readDataBase()
 end
 
 function m.writeDataBase(db)
-    for lang, _ in pairs(db) do
-        timer.endEditTime(lang, db)
-        timer.endMoveTime(lang, db)
+    for lang, _ in pairs(db.files) do
+        timer.endEditTime(lang, db.files)
+        timer.endMoveTime(lang, db.files)
     end
     local outputJson = vim.json.encode(db)
     if outputJson ~= false then

@@ -46,7 +46,8 @@ function flex.core.timer.endEditTime(filetype, database) end
 
 ---table with the filetypes as a string, then the value should be the filetype's
 ---data
----@alias flex.database table<flex.filetype, flex.database.data|{}>
+---@class flex.database
+---@field files table<flex.filetype, flex.database.data|{}>
 
 ---table containing the filetype's data
 ---@class flex.database.data

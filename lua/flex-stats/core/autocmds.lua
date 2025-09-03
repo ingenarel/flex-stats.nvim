@@ -1,17 +1,19 @@
 local timer = require("flex-stats.core.timer")
 local database = require("flex-stats").database
+database.files = database.files or {}
+local fileDatabase = database.files
 local delete = require("flex-stats.core.lock").delete
 
 local function modeCheck()
     local currentMode = string.lower(vim.fn.mode())
     if string.find(currentMode, "i") or string.find(currentMode, "r") then
-        timer.startEditTime(nil, database)
+        timer.startEditTime(nil, fileDatabase)
     else
-        timer.endEditTime(nil, database)
+        timer.endEditTime(nil, fileDatabase)
         if string.find(currentMode, "n") or string.find(currentMode, "v") then
-            timer.startMoveTime(nil, database)
+            timer.startMoveTime(nil, fileDatabase)
         else
-            timer.endMoveTime(nil, database)
+            timer.endMoveTime(nil, fileDatabase)
         end
     end
 end
@@ -24,8 +26,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 vim.api.nvim_create_autocmd("BufLeave", {
     callback = function()
-        timer.endMoveTime(nil, database)
-        timer.endEditTime(nil, database)
+        timer.endMoveTime(nil, fileDatabase)
+        timer.endEditTime(nil, fileDatabase)
     end,
 })
 
@@ -37,12 +39,12 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 
 vim.api.nvim_create_autocmd("CursorHoldI", {
     callback = function()
-        timer.endEditTime(nil, database)
+        timer.endEditTime(nil, fileDatabase)
         ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
             callback = function()
-                timer.startEditTime(nil, database)
+                timer.startEditTime(nil, fileDatabase)
                 vim.api.nvim_del_autocmd(id[1])
             end,
         })
@@ -51,12 +53,12 @@ vim.api.nvim_create_autocmd("CursorHoldI", {
 
 vim.api.nvim_create_autocmd("CursorHold", {
     callback = function()
-        timer.endMoveTime(nil, database)
+        timer.endMoveTime(nil, fileDatabase)
         ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
             callback = function()
-                timer.startMoveTime(nil, database)
+                timer.startMoveTime(nil, fileDatabase)
                 vim.api.nvim_del_autocmd(id[1])
             end,
         })

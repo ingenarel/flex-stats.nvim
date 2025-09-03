@@ -46,7 +46,7 @@ function m.showUI(opts)
     db[""] = nil
     vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
     vim.schedule(function()
-        m.fileStatsMenu(db, bufID, win_width, opts.nsID)
+        m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
     end)
     local autocmdID = {}
     autocmdID[1] = vim.api.nvim_create_autocmd("VimResized", {
