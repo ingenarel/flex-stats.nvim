@@ -2,13 +2,24 @@
 local m = {}
 
 function m.popTableKey(keys, tbl)
-    if #keys > 1 then
-        tbl = tbl[keys[1]]
-        table.remove(keys, 1)
-        return m.popTableKey(keys, tbl)
-    elseif #keys == 1 then
-        local returnTable = vim.deepcopy(tbl[keys[1]])
-        tbl[keys[1]] = nil
+    if type(keys) == "table" then
+        if #keys > 1 then
+            tbl = tbl[keys[1]]
+            table.remove(keys, 1)
+            return m.popTableKey(keys, tbl)
+        elseif #keys == 1 then
+            local returnTable = vim.deepcopy(tbl[keys[1]])
+            tbl[keys[1]] = nil
+            return returnTable
+        end
+    elseif keys == nil then
+        local returnTable = vim.deepcopy(tbl)
+        for i = 1, #tbl do
+            tbl[i] = nil
+        end
+        for key, _ in pairs(tbl) do
+            tbl[key] = nil
+        end
         return returnTable
     end
 end
