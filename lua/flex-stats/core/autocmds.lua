@@ -28,6 +28,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
     callback = function()
         timer.endMoveTime(nil, fileDatabase)
         timer.endEditTime(nil, fileDatabase)
+        timer.endIdleTime(nil, fileDatabase)
     end,
 })
 
@@ -40,11 +41,13 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 vim.api.nvim_create_autocmd("CursorHoldI", {
     callback = function()
         timer.endEditTime(nil, fileDatabase)
+        timer.startIdleTime(nil, fileDatabase)
         ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
             callback = function()
                 timer.startEditTime(nil, fileDatabase)
+                timer.endIdleTime(nil, fileDatabase)
                 vim.api.nvim_del_autocmd(id[1])
             end,
         })
@@ -54,11 +57,13 @@ vim.api.nvim_create_autocmd("CursorHoldI", {
 vim.api.nvim_create_autocmd("CursorHold", {
     callback = function()
         timer.endMoveTime(nil, fileDatabase)
+        timer.startIdleTime(nil, fileDatabase)
         ---@type [ number ]
         local id = {}
         id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
             callback = function()
                 timer.startMoveTime(nil, fileDatabase)
+                timer.endIdleTime(nil, fileDatabase)
                 vim.api.nvim_del_autocmd(id[1])
             end,
         })

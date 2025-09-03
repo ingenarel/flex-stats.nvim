@@ -15,6 +15,9 @@ function m.filetypeSetup(filetype, database)
     if type(database[filetype].moveTotalTime) ~= "number" then
         database[filetype].moveTotalTime = 0
     end
+    if type(database[filetype].idleTotalTime) ~= "number" then
+        database[filetype].idleTotalTime = 0
+    end
 end
 
 function m.startMoveTime(filetype, database)
@@ -63,6 +66,31 @@ function m.endEditTime(filetype, database)
                 + os.time()
                 - database[filetype].lastEditEnter
             database[filetype].lastEditEnter = nil
+        end
+    end
+end
+
+function m.startIdleTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
+    filetype = filetype or vim.opt.filetype:get()
+    if filetype ~= "" then
+        m.filetypeSetup(filetype, database)
+        if not database[filetype].lastIdleEnter then
+            database[filetype].lastIdleEnter = os.time()
+        end
+    end
+end
+
+function m.endIdleTime(filetype, database)
+    ---@diagnostic disable-next-line: undefined-field
+    filetype = filetype or vim.opt.filetype:get()
+    if filetype ~= "" then
+        m.filetypeSetup(filetype, database)
+        if database[filetype].lastIdleEnter then
+            database[filetype].idleTotalTime = database[filetype].idleTotalTime
+                + os.time()
+                - database[filetype].lastIdleEnter
+            database[filetype].lastIdleEnter = nil
         end
     end
 end
