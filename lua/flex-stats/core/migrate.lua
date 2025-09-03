@@ -2,6 +2,7 @@
 local m = {}
 
 function m.popTableKey(keys, tbl)
+    keys = vim.deepcopy(keys)
     if type(keys) == "table" then
         if #keys > 1 then
             tbl = tbl[keys[1]]
@@ -25,6 +26,7 @@ function m.popTableKey(keys, tbl)
 end
 
 function m.createRecursiveTableKeys(keys, tbl)
+    keys = vim.deepcopy(keys)
     if #keys > 0 then
         local key = keys[1]
         if type(tbl[key]) ~= "table" then
