@@ -53,6 +53,7 @@ function m.showUI(opts)
     db[""] = nil
     vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
     vim.schedule(function()
+        ---@diagnostic disable-next-line: need-check-nil
         m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
     end)
     local autocmdID = {}
