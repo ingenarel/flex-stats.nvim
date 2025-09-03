@@ -123,15 +123,15 @@ function flex.init.showStats() end
 ---@field autocmd flex.init.sharedValues.autocmd
 
 ---@class flex.init.sharedValues.autocmd
----@field groupID integer|nil
----@field BufEnterID integer|nil
----@field BufLeaveID integer|nil
----@field ModeChangedID integer|nil
----@field CursorHoldI_ID integer|nil
----@field CursorHold_ID integer|nil
----@field CursorMovedI_ID integer|nil
----@field CursorMoved_ID integer|nil
----@field VimLeavePreID integer|nil
+---@field groupID integer?
+---@field BufEnterID integer?
+---@field BufLeaveID integer?
+---@field ModeChangedID integer?
+---@field CursorHoldI_ID integer?
+---@field CursorHold_ID integer?
+---@field CursorMovedI_ID integer?
+---@field CursorMoved_ID integer?
+---@field VimLeavePreID integer?
 
 ---the module containing the database functions
 ---@class flex.core.db
