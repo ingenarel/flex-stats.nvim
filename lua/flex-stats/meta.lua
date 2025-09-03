@@ -80,6 +80,7 @@ function flex.core.migrate.createRecursiveTableKeys(keys, tbl) end
 
 ---@param keys string[]
 ---@param tbl table
+---@nodiscard
 function flex.core.migrate.popTableKey(keys, tbl) end
 
 ---module containing the init functions
