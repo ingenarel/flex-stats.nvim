@@ -101,10 +101,8 @@ function flex.core.migrate.moveDeeper(oldKeys, newKeys, db) end
 ---module containing the init functions
 ---@class flex.init
 ---@field setupOpts flex.init.setupOpts
+---@field database flex.database|nil
 flex.init = {}
-
----@type flex.database
-flex.init.database = {}
 
 ---@param opts flex.init.setupOpts
 ---the setup function

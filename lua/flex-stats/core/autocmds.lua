@@ -1,5 +1,5 @@
 local timer = require("flex-stats.core.timer")
-local database = require("flex-stats").database
+local database = require("flex-stats").database or {}
 database.files = database.files or {}
 local fileDatabase = database.files
 local delete = require("flex-stats.core.lock").delete
