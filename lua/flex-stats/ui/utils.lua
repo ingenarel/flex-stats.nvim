@@ -175,7 +175,7 @@ function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
                 line = line .. db[x][y][z] .. string.rep(" ", gap)
                 z = z + 1
             end
-            line = line .. db[x][y][z]
+            line = line .. (db[x][y][z] or "")
             table.insert(lines, line)
         end
     end
