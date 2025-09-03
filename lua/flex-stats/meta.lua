@@ -164,6 +164,9 @@ function flex.ui.init.fileStatsMenu(db, buf, win_width, nsID) end
 ---opens the ui
 function flex.ui.init.showUI(opts) end
 
+---@param autocmdID integer
+function flex.ui.init.endUI(autocmdID) end
+
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80

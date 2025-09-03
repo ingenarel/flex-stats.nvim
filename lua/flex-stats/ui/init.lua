@@ -21,6 +21,13 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
+function m.endUI(autocmdID)
+    vim.schedule(function()
+        vim.cmd.q()
+    end)
+    vim.api.nvim_del_autocmd(autocmdID)
+end
+
 function m.showUI(opts)
     opts = opts or {}
     opts.width = opts.width or 80
@@ -58,10 +65,11 @@ function m.showUI(opts)
             end)
         end,
     })
-    vim.keymap.set("n", "<ESC>", "<CMD>q<CR>", { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "<ESC>", function()
+        m.endUI(autocmdID[1])
+    end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", function()
-        vim.api.nvim_del_autocmd(autocmdID[1])
-        vim.cmd.q()
+        m.endUI(autocmdID[1])
     end, { noremap = true, silent = true, buffer = true })
 end
 
