@@ -1,6 +1,18 @@
 ---@type flex.core.migrate
 local m = {}
 
+function m.popTableKey(keys, tbl)
+    if #keys > 1 then
+        tbl = tbl[keys[1]]
+        table.remove(keys, 1)
+        return m.popTableKey(keys, tbl)
+    elseif #keys == 1 then
+        local returnTable = vim.deepcopy(tbl[keys[1]])
+        tbl[keys[1]] = nil
+        return returnTable
+    end
+end
+
 function m.createRecursiveTableKeys(keys, tbl)
     if #keys > 0 then
         local key = keys[1]
