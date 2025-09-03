@@ -44,6 +44,17 @@ function m.createRecursiveTableKeys(keys, tbl)
     end
 end
 
+function m.setRecursiveKey(keys, value, tbl)
+    keys = vim.deepcopy(keys)
+    if #keys > 1 then
+        tbl = tbl[keys[1]]
+        table.remove(keys, 1)
+        m.setRecursiveKey(keys, value, tbl)
+    elseif #keys == 1 then
+        tbl[keys[1]] = value
+    end
+end
+
 function m.keys(oldName, newName, database)
     database = database or require("flex-stats").database
     for lang, _ in pairs(database) do
