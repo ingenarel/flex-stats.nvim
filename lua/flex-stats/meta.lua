@@ -129,6 +129,8 @@ function flex.init.showStats() end
 ---@field ModeChangedID integer|nil
 ---@field CursorHoldI_ID integer|nil
 ---@field CursorHold_ID integer|nil
+---@field CursorMovedI_ID integer|nil
+---@field CursorMoved_ID integer|nil
 ---@field VimLeavePreID integer|nil
 
 ---the module containing the database functions

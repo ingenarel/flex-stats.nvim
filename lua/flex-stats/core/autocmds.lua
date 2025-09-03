@@ -58,15 +58,17 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
         callback = function()
             timer.endEditTime(nil, fileDatabase)
             timer.startIdleTime(nil, fileDatabase)
-            ---@type [ number ]
-            local id = {}
-            id[1] = vim.api.nvim_create_autocmd("CursorMovedI", {
-                callback = function()
-                    timer.startEditTime(nil, fileDatabase)
-                    timer.endIdleTime(nil, fileDatabase)
-                    vim.api.nvim_del_autocmd(id[1])
-                end,
-            })
+            sharedValues.autocmd.CursorMovedI_ID = sharedValues.autocmd.CursorMovedI_ID
+                or vim.api.nvim_create_autocmd("CursorMovedI", {
+                    callback = function()
+                        timer.startEditTime(nil, fileDatabase)
+                        timer.endIdleTime(nil, fileDatabase)
+                        vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMovedI_ID)
+                        sharedValues.autocmd.CursorMovedI_ID = nil
+                    end,
+                    group = "flex-stats.nvim",
+                    desc = "ends idle timer, starts edit timer",
+                })
         end,
         group = "flex-stats.nvim",
         desc = "ends edit timer, starts idle timer",
@@ -77,15 +79,17 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
         callback = function()
             timer.endMoveTime(nil, fileDatabase)
             timer.startIdleTime(nil, fileDatabase)
-            ---@type [ number ]
-            local id = {}
-            id[1] = vim.api.nvim_create_autocmd("CursorMoved", {
-                callback = function()
-                    timer.startMoveTime(nil, fileDatabase)
-                    timer.endIdleTime(nil, fileDatabase)
-                    vim.api.nvim_del_autocmd(id[1])
-                end,
-            })
+            sharedValues.autocmd.CursorMoved_ID = sharedValues.autocmd.CursorMoved_ID
+                or vim.api.nvim_create_autocmd("CursorMoved", {
+                    callback = function()
+                        timer.startMoveTime(nil, fileDatabase)
+                        timer.endIdleTime(nil, fileDatabase)
+                        vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMoved_ID)
+                        sharedValues.autocmd.CursorMoved_ID = nil
+                    end,
+                    group = "flex-stats.nvim",
+                    desc = "ends idle timer, starts move timer",
+                })
         end,
         group = "flex-stats.nvim",
         desc = "ends move timer, starts idle timer",
