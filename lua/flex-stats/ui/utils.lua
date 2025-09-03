@@ -54,8 +54,10 @@ function m.fileStatsMenu1stPass(db, nsID)
     for lang, data in pairs(db) do
         local moving = data["moveTotalTime"] or 0
         local editing = data["editTotalTime"] or 0
-        local writing = moving + editing
-        if writing > 0 then
+        local idle = data["idleTotalTime"] or 0
+        local active = moving + editing
+        local total = active + idle
+        if total > 0 then
             table.insert(fp, {})
             local fileName, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
             if not fileName then
@@ -69,9 +71,9 @@ function m.fileStatsMenu1stPass(db, nsID)
             vim.api.nvim_set_hl(nsID, color, { fg = "#" .. color, underline = true })
             vim.fn.matchadd(color, fileNameString)
 
-            local writingString = "Writing: " .. m.time(writing)
-            table.insert(fp[#fp], writingString)
-            m.colorString(writingString, m.getColor(setupOpts.fileStatsGradientMax, writing), nsID)
+            local totalString = "Total: " .. m.time(total)
+            table.insert(fp[#fp], totalString)
+            m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, total), nsID)
 
             if editing > 0 then
                 local editString = "Editing: " .. m.time(editing)
@@ -83,10 +85,20 @@ function m.fileStatsMenu1stPass(db, nsID)
                 table.insert(fp[#fp], moveString)
                 m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, moving), nsID)
             end
-            for _ = #fp[#fp], 5 do
+            if active > 0 then
+                local activeString = "Active: " .. m.time(active)
+                table.insert(fp[#fp], activeString)
+                m.colorString(activeString, m.getColor(setupOpts.fileStatsGradientMax, active), nsID)
+            end
+            if idle > 0 then
+                local idleString = "Idle: " .. m.time(idle)
+                table.insert(fp[#fp], idleString)
+                m.colorString(idleString, m.getColor(setupOpts.fileStatsGradientMax, idle), nsID)
+            end
+            for _ = #fp[#fp], 6 do
                 table.insert(fp[#fp], "")
             end
-            fp[#fp].writingTime = writing
+            fp[#fp].writingTime = active
         end
     end
     return fp
