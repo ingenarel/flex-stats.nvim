@@ -77,4 +77,11 @@ function m.keys(oldName, newName, database)
     end
 end
 
+function m.moveDeeper(oldKeys, newKeys, db)
+    db = db or require("flex-stats").database
+    local oldValue = m.popTableKey(oldKeys, db)
+    m.createRecursiveTableKeys(newKeys, db)
+    m.setRecursiveKey(newKeys, oldValue, db)
+end
+
 return m

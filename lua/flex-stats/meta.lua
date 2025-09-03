@@ -88,6 +88,15 @@ function flex.core.migrate.popTableKey(keys, tbl) end
 ---@param tbl table
 function flex.core.migrate.setRecursiveKey(keys, value, tbl) end
 
+---@param oldKeys string[]
+---@param newKeys string[]
+---@param db nil|flex.database|table
+---a key migration function
+---if the database is `{ x = 123 , ..}` and you want to move everything to
+---`a` do moveDeeper(nil, {"a"}, nil), then the database should be `{ a = { x =
+---123 } }`
+function flex.core.migrate.moveDeeper(oldKeys, newKeys, db) end
+
 ---module containing the init functions
 ---@class flex.init
 ---@field setupOpts flex.init.setupOpts
