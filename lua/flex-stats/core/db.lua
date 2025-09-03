@@ -34,6 +34,10 @@ function m.readDataBase()
 end
 
 function m.writeDataBase(db)
+    local sharedValues = require("flex-stats").sharedValues
+    if sharedValues.timer:is_active() then
+        sharedValues.timer:again()
+    end
     for lang, _ in pairs(db.files) do
         timer.endEditTime(lang, db.files)
         timer.endMoveTime(lang, db.files)

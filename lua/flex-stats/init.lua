@@ -24,6 +24,7 @@ local m = {
         indentDriftForIcon = 2,
         gap = 5,
         fileStatsGradientMax = 360000,
+        saveInterval = 600000,
     },
     sharedValues = {
         autocmd = {},

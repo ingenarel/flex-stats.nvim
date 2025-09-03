@@ -115,12 +115,14 @@ function flex.init.setup(opts) end
 ---@field gap integer the minimum gap for the file UI
 ---@field fileStatsGradientMax integer
 ---@field nsID integer?
+---@field saveInterval integer should be in milliseconds
 
 ---to show the stats
 function flex.init.showStats() end
 
 ---@class flex.init.sharedValues
 ---@field autocmd flex.init.sharedValues.autocmd
+---@field timer uv.uv_timer_t?
 
 ---@class flex.init.sharedValues.autocmd
 ---@field groupID integer?

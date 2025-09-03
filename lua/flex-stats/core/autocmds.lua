@@ -3,7 +3,9 @@ local database = require("flex-stats").database or {}
 database.files = database.files or {}
 local fileDatabase = database.files
 local delete = require("flex-stats.core.lock").delete
+local write = require("flex-stats.core.db").writeDataBase
 local sharedValues = require("flex-stats").sharedValues
+local setupOpts = require("flex-stats").setupOpts
 
 local function modeCheck()
     local currentMode = string.lower(vim.fn.mode())
@@ -98,9 +100,18 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
 sharedValues.autocmd.VimLeavePreID = sharedValues.autocmd.VimLeavePreID
     or vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
-            require("flex-stats.core.db").writeDataBase(database)
+            write(database)
             delete()
         end,
         group = "flex-stats.nvim",
         desc = "writes the database",
     })
+
+sharedValues.timer = sharedValues.timer or vim.uv.new_timer()
+_ = sharedValues.timer:is_active()
+    or sharedValues.timer:start(setupOpts.saveInterval, setupOpts.saveInterval, function()
+        write(database)
+        vim.schedule(function()
+            modeCheck()
+        end)
+    end)
