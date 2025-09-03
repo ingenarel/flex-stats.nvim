@@ -102,6 +102,7 @@ function flex.core.migrate.moveDeeper(oldKeys, newKeys, db) end
 ---@class flex.init
 ---@field setupOpts flex.init.setupOpts
 ---@field database flex.database|nil
+---@field sharedValues flex.init.sharedValues
 flex.init = {}
 
 ---@param opts flex.init.setupOpts
@@ -117,6 +118,18 @@ function flex.init.setup(opts) end
 
 ---to show the stats
 function flex.init.showStats() end
+
+---@class flex.init.sharedValues
+---@field autocmd flex.init.sharedValues.autocmd
+
+---@class flex.init.sharedValues.autocmd
+---@field groupID integer|nil
+---@field BufEnterID integer|nil
+---@field BufLeaveID integer|nil
+---@field ModeChangedID integer|nil
+---@field CursorHoldI_ID integer|nil
+---@field CursorHold_ID integer|nil
+---@field VimLeavePreID integer|nil
 
 ---the module containing the database functions
 ---@class flex.core.db

@@ -25,6 +25,9 @@ local m = {
         gap = 5,
         fileStatsGradientMax = 360000,
     },
+    sharedValues = {
+        autocmd = {},
+    },
 }
 
 local db = require("flex-stats.core.db")
