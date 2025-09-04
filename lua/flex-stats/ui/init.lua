@@ -21,6 +21,13 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
+function m.nvimStatsMenu(db, buf, win_width, nsID)
+    local lines = { "In progress" }
+    vim.bo[buf].modifiable = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+    vim.bo[buf].modifiable = false
+end
+
 function m.endUI(autocmdID)
     vim.schedule(function()
         vim.cmd.q()

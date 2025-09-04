@@ -159,7 +159,7 @@ flex.ui.init = {}
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats
----shows the stats menu on a buffer
+---shows the file stats menu on a buffer
 function flex.ui.init.fileStatsMenu(db, buf, win_width, nsID) end
 
 ---@param opts flex.ui.init.showUIOpts?
@@ -168,6 +168,13 @@ function flex.ui.init.showUI(opts) end
 
 ---@param autocmdID integer
 function flex.ui.init.endUI(autocmdID) end
+
+---@param db flex.database
+---@param buf integer the buffer number
+---@param win_width integer the window width
+---@param nsID integer the nsid of the color namespace for flexstats
+---shows the nvim stats menu on a buffer
+function flex.ui.init.nvimStatsMenu(db, buf, win_width, nsID) end
 
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
