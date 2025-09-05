@@ -180,6 +180,7 @@ function flex.ui.init.nvimStatsMenu(db, buf, win_width, nsID) end
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80
 ---@field nsID integer
+---@field page "file"|"nvim"|nil
 
 ---@class flex.ui.utils
 flex.ui.utils = {}

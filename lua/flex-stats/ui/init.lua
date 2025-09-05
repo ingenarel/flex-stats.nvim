@@ -41,6 +41,7 @@ function m.showUI(opts)
     opts = opts or {}
     opts.width = opts.width or 80
     opts.height = opts.height or 80
+    opts.page = opts.page or "file"
 
     ---@type integer
     local win_width = math.floor(vim.o.columns / 100 * opts.width)
@@ -62,9 +63,19 @@ function m.showUI(opts)
     local db = require("flex-stats").database
     db[""] = nil
     vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
-    vim.schedule(function()
-        m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
-    end)
+    local pages = {
+        file = function()
+            vim.schedule(function()
+                m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
+            end)
+        end,
+        nvim = function()
+            vim.schedule(function()
+                m.nvimStatsMenu(db, bufID, win_width, opts.nsID)
+            end)
+        end,
+    }
+    pages[opts.page]()
     local autocmdID = {}
     autocmdID[1] = vim.api.nvim_create_autocmd("VimResized", {
         callback = function()
@@ -82,14 +93,12 @@ function m.showUI(opts)
         m.endUI(autocmdID[1])
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "f", function()
-        vim.schedule(function()
-            m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
-        end)
+        opts.page = "file"
+        pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "n", function()
-        vim.schedule(function()
-            m.nvimStatsMenu(db, bufID, win_width, opts.nsID)
-        end)
+        opts.page = "nvim"
+        pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
 end
 
