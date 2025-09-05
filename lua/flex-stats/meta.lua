@@ -14,26 +14,27 @@ flex.core.timer = {}
 
 ---name of the filetype. should be accessible via vim.opt.filetype
 ---@alias flex.filetype string
+---@alias timerInput flex.database|flex.database.nvim
 
 ---@param filetype flex.filetype
----@param database flex.database
+---@param database timerInput
 ---setup necessary database options for a filetype if they're not set yet
 function flex.core.timer.filetypeSetup(filetype, database) end
 
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 ---sets the current time as the lastMoveEnter in the database if it hasn't been
 ---set yet
 function flex.core.timer.startMoveTime(filetype, database) end
 
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 ---sets the moveTotalTime by subtracting the current time returned by |os.time()|
 ---from the lastMoveEnter in the database, then set the lastMoveEnter to nil
 function flex.core.timer.endMoveTime(filetype, database) end
 
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 ---sets the current time as the lastEditEnter in the database if it hasn't been
 ---set yet
 function flex.core.timer.startEditTime(filetype, database) end
@@ -41,17 +42,17 @@ function flex.core.timer.startEditTime(filetype, database) end
 ---sets the EditTotalTime by subtracting the current time returned by |os.time()|
 ---from the lastEditEnter in the database, then set the lastEditEnter to nil
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 function flex.core.timer.endEditTime(filetype, database) end
 
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 ---sets the current time as the lastIdleEnter in the database if it hasn't been
 ---set yet
 function flex.core.timer.startIdleTime(filetype, database) end
 
 ---@param filetype flex.filetype?
----@param database flex.database
+---@param database timerInput
 ---sets the idleTotalTime by subtracting the current time returned by |os.time()|
 ---from the lastIdleEnter in the database, then set the lastIdleEnter to nil
 function flex.core.timer.endIdleTime(filetype, database) end
@@ -59,16 +60,20 @@ function flex.core.timer.endIdleTime(filetype, database) end
 ---table with the filetypes as a string, then the value should be the filetype's
 ---data
 ---@class flex.database
----@field files table<flex.filetype, flex.database.data|{}>
+---@field files table<flex.filetype, flex.database.fileData|{}>
+---@field nvim flex.database.nvim
 
 ---table containing the filetype's data
----@class flex.database.data
+---@class flex.database.fileData
 ---@field editTotalTime integer total time that has been spent on editing
 ---@field moveTotalTime integer total time that has been spent on moving around
 ---@field lastIdleTime integer?
 ---@field lastMoveEnter integer? last time movement started to happen
 ---@field lastEditEnter integer? last time editing started to happen
 ---@field lastIdleEnter integer?
+
+---@class flex.database.nvim
+---@field configStats flex.database.fileData
 
 ---module containing migrating functions
 ---@class flex.core.migrate
