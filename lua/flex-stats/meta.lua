@@ -63,14 +63,12 @@ function flex.core.timer.endIdleTime(filetype, database) end
 
 ---table containing the filetype's data
 ---@class flex.database.data
----total time that has been spent on editing
----@field editTotalTime integer
----total time that has been spent on moving around
----@field moveTotalTime integer
----last time movement started to happen
----@field lastMoveEnter integer?
----last time editing started to happen
----@field lastEditEnter integer?
+---@field editTotalTime integer total time that has been spent on editing
+---@field moveTotalTime integer total time that has been spent on moving around
+---@field lastIdleTime integer?
+---@field lastMoveEnter integer? last time movement started to happen
+---@field lastEditEnter integer? last time editing started to happen
+---@field lastIdleEnter integer?
 
 ---module containing migrating functions
 ---@class flex.core.migrate
