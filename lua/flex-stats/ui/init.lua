@@ -85,6 +85,8 @@ function m.showUI(opts)
                 m.showUI(opts)
             end)
         end,
+        group = "flex-stats.nvim",
+        desc = "redraw the window",
     })
     vim.keymap.set("n", "<ESC>", function()
         m.endUI(autocmdID[1])
