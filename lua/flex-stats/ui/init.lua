@@ -23,10 +23,19 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
 end
 
 function m.nvimStatsMenu(db, buf, win_width, nsID)
-    local lines = { "In progress" }
-    lines = utils.addMaps(lines, win_width, "nvim")
+    local setupOpts = require("flex-stats").setupOpts
+    db = vim.deepcopy(db)
+    db = utils.fileStatsMenu1stPass(
+        db,
+        nsID,
+        { oldFileName = "configStats", newFileName = "Config", icon = "", color = "#00CF00", nameColor = "#ff0000" }
+    )
+    db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
+    db = utils.fileStatsMenu3rdPass(db)
+    db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)
+    db = utils.addMaps(db, win_width, "nvim")
     vim.bo[buf].modifiable = true
-    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
 end
 

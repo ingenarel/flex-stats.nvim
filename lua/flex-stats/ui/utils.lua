@@ -48,7 +48,8 @@ function m.colorString(regex, hexColor, nsID)
     vim.fn.matchadd(hexColor, regex)
 end
 
-function m.fileStatsMenu1stPass(db, nsID)
+function m.fileStatsMenu1stPass(db, nsID, opts)
+    opts = opts or {}
     local setupOpts = require("flex-stats").setupOpts
     local fp = {}
     for lang, data in pairs(db) do
@@ -59,17 +60,35 @@ function m.fileStatsMenu1stPass(db, nsID)
         local total = active + idle
         if total > 0 then
             table.insert(fp, {})
-            local fileName, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
-            if not fileName then
-                fileName = ""
+            local fileNameString
+            if opts.oldFileName == lang then
+                lang = opts.newFileName
+            end
+            ---@cast lang string
+            local icon, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
+            if not icon then
+                icon = ""
                 color = "#939393"
             end
 
-            local fileNameString = fileName .. " " .. lang
+            if opts.icon then
+                icon = opts.icon
+            end
+            if opts.color then
+                color = opts.color
+            end
+            ---@cast color string
+
+            fileNameString = icon .. " " .. lang
             table.insert(fp[#fp], fileNameString)
             color = string.gsub(color, "#", "")
             vim.api.nvim_set_hl(nsID, color, { fg = "#" .. color, underline = true })
             vim.fn.matchadd(color, fileNameString)
+            if opts.nameColor then
+                opts.nameColor = string.gsub(opts.nameColor, "#", "")
+                vim.api.nvim_set_hl(nsID, opts.nameColor, { fg = "#" .. opts.nameColor, underline = true })
+                vim.fn.matchadd(opts.nameColor, lang)
+            end
 
             local totalString = "Total: " .. m.time(total)
             table.insert(fp[#fp], totalString)

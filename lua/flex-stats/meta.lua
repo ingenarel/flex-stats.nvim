@@ -184,7 +184,7 @@ function flex.ui.init.showUI(opts) end
 ---@param autocmdID integer
 function flex.ui.init.endUI(autocmdID) end
 
----@param db flex.database
+---@param db flex.database.nvim
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats
@@ -211,11 +211,19 @@ function flex.ui.utils.time(seconds) end
 ---centers a string to fit inside the middle of the width
 function flex.ui.utils.center(input, width, char) end
 
----@param db flex.database
----@return flex.ui.utils.fileStatsMenu1stPassReturn[]
+---@param db flex.database|flex.database.nvim
 ---@param nsID integer the nsid of the color namespace for flexstats
+---@param opts flex.ui.utils.fileStatsMenu1stPassOpts? optional options
+---@return flex.ui.utils.fileStatsMenu1stPassReturn[]
 ---@nodiscard
-function flex.ui.utils.fileStatsMenu1stPass(db, nsID) end
+function flex.ui.utils.fileStatsMenu1stPass(db, nsID, opts) end
+
+---@class flex.ui.utils.fileStatsMenu1stPassOpts
+---@field oldFileName string?
+---@field newFileName string?
+---@field icon string?
+---@field color string?
+---@field nameColor string?
 
 ---@class flex.ui.utils.fileStatsMenu1stPassReturn
 ---@field [1] string file icon and name
@@ -269,6 +277,13 @@ function flex.ui.utils.colorString(regex, hexColor, nsID) end
 ---@param input number
 ---@return string hexcode
 function flex.ui.utils.getColor(steps, input) end
+
+---@param lines string[]
+---@param win_width integer
+---@param currentMenu "file"|"nvim"|"quit"
+---@return string[]
+---@nodiscard
+function flex.ui.utils.addMaps(lines, win_width, currentMenu) end
 
 ---@class flex.core.lock
 flex.core.lock = {}
