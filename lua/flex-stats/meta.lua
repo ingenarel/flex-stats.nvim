@@ -44,6 +44,18 @@ function flex.core.timer.startEditTime(filetype, database) end
 ---@param database flex.database
 function flex.core.timer.endEditTime(filetype, database) end
 
+---@param filetype flex.filetype?
+---@param database flex.database
+---sets the current time as the lastIdleEnter in the database if it hasn't been
+---set yet
+function flex.core.timer.startIdleTime(filetype, database) end
+
+---@param filetype flex.filetype?
+---@param database flex.database
+---sets the idleTotalTime by subtracting the current time returned by |os.time()|
+---from the lastIdleEnter in the database, then set the lastIdleEnter to nil
+function flex.core.timer.endIdleTime(filetype, database) end
+
 ---table with the filetypes as a string, then the value should be the filetype's
 ---data
 ---@class flex.database
