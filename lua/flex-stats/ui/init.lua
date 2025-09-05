@@ -71,7 +71,7 @@ function m.showUI(opts)
         end,
         nvim = function()
             vim.schedule(function()
-                m.nvimStatsMenu(db, bufID, win_width, opts.nsID)
+                m.nvimStatsMenu(db.nvim, bufID, win_width, opts.nsID)
             end)
         end,
     }
