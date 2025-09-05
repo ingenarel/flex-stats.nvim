@@ -225,4 +225,33 @@ function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
     return lines
 end
 
+function m.addMaps(lines, win_width, currentMenu)
+    local output = {}
+    local maps = {
+        file = " [f]ile ",
+        nvim = " [n]vim ",
+        quit = " [q]uit ",
+    }
+    vim.fn.matchadd("FlexStatsMenuItem", " \\[\\S\\]\\S\\+ ")
+    local currentMenuHi = string.gsub(maps[currentMenu], "[%[%]]", "\\%1")
+    vim.fn.matchadd("FlexStatsCurrentMenu", currentMenuHi)
+    local len = 0
+    local keys = 0
+    for _, value in pairs(maps) do
+        len = len + #value
+        keys = keys + 1
+    end
+    local gap = math.floor((win_width - len) / (keys + 1))
+    local line = ""
+    for _, value in pairs(maps) do
+        line = line .. string.rep(" ", gap) .. value
+    end
+    table.insert(output, line)
+    table.insert(output, "")
+    for i = 1, #lines do
+        table.insert(output, lines[i])
+    end
+    return output
+end
+
 return m

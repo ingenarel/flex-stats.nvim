@@ -230,6 +230,20 @@ function flex.ui.utils.fileStatsMenu3rdPass(db) end
 ---@nodiscard
 function flex.ui.utils.fileStatsMenu4thPass(db, win_width, indentDriftForIcon) end
 
+---@param db string[][][]
+---@param x integer
+---@param indentDriftForIcon integer
+---@param win_width integer
+---@param lines string[]
+function flex.ui.utils.fileStatsMenu4thPassNoEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines) end
+
+---@param db string[][][]
+---@param x integer
+---@param indentDriftForIcon integer
+---@param win_width integer
+---@param lines string[]
+function flex.ui.utils.fileStatsMenu4thPassEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines) end
+
 ---@param regex string
 ---@param hexColor string
 ---@param nsID integer

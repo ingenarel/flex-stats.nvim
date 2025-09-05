@@ -57,6 +57,8 @@ function m.setup(opts)
     vim.api.nvim_create_user_command("Flex", function()
         m.showStats()
     end, {})
+    vim.api.nvim_set_hl(0, "FlexStatsMenuItem", { link = "Pmenu", default = true })
+    vim.api.nvim_set_hl(0, "FlexStatsCurrentMenu", { link = "PmenuSel", default = true })
 end
 
 function m.showStats()

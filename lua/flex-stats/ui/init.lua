@@ -16,6 +16,7 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
     db = utils.fileStatsMenu3rdPass(db)
     db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)
+    db = utils.addMaps(db, win_width, "file")
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
@@ -23,6 +24,7 @@ end
 
 function m.nvimStatsMenu(db, buf, win_width, nsID)
     local lines = { "In progress" }
+    lines = utils.addMaps(lines, win_width, "nvim")
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
     vim.bo[buf].modifiable = false
@@ -56,11 +58,11 @@ function m.showUI(opts)
         style = "minimal",
     })
     vim.bo[bufID].filetype = "flexstats"
+    ---@type flex.database
     local db = require("flex-stats").database
     db[""] = nil
     vim.api.nvim_win_set_hl_ns(winID, opts.nsID)
     vim.schedule(function()
-        ---@diagnostic disable-next-line: need-check-nil
         m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
     end)
     local autocmdID = {}
@@ -78,6 +80,16 @@ function m.showUI(opts)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", function()
         m.endUI(autocmdID[1])
+    end, { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "f", function()
+        vim.schedule(function()
+            m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
+        end)
+    end, { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "n", function()
+        vim.schedule(function()
+            m.nvimStatsMenu(db, bufID, win_width, opts.nsID)
+        end)
     end, { noremap = true, silent = true, buffer = true })
 end
 
