@@ -203,13 +203,15 @@ function flex.ui.init.endUI(autocmdID) end
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats
 ---shows the nvim stats menu on a buffer
-function flex.ui.init.nvimStatsMenu(db, buf, win_width, nsID) end
+function flex.ui.init.nvimDevStatsMenu(db, buf, win_width, nsID) end
 
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80
 ---@field nsID integer
----@field page "file"|"nvim"|nil
+---@field page flex.ui.init.showUIOpts.page?
+
+---@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"
 
 ---@class flex.ui.utils
 flex.ui.utils = {}
@@ -287,7 +289,7 @@ function flex.ui.utils.getColor(steps, input) end
 
 ---@param lines string[]
 ---@param win_width integer
----@param currentMenu "file"|"nvim"|"quit"
+---@param currentMenu flex.ui.init.showUIOpts.page
 ---@return string[]
 ---@nodiscard
 function flex.ui.utils.addMaps(lines, win_width, currentMenu) end

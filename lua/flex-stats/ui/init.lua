@@ -22,14 +22,14 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
-function m.nvimStatsMenu(db, buf, win_width, nsID)
+function m.nvimDevStatsMenu(db, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     db = vim.deepcopy(db)
     db = utils.fileStatsMenu1stPass(db, nsID, setupOpts.nameOverrides)
     db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
     db = utils.fileStatsMenu3rdPass(db)
     db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)
-    db = utils.addMaps(db, win_width, "nvim")
+    db = utils.addMaps(db, win_width, "dev")
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
     vim.bo[buf].modifiable = false
@@ -74,9 +74,9 @@ function m.showUI(opts)
                 m.fileStatsMenu(db.files, bufID, win_width, opts.nsID)
             end)
         end,
-        nvim = function()
+        dev = function()
             vim.schedule(function()
-                m.nvimStatsMenu(db.nvim, bufID, win_width, opts.nsID)
+                m.nvimDevStatsMenu(db.nvim, bufID, win_width, opts.nsID)
             end)
         end,
     }
@@ -103,8 +103,8 @@ function m.showUI(opts)
         opts.page = "file"
         pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
-    vim.keymap.set("n", "n", function()
-        opts.page = "nvim"
+    vim.keymap.set("n", "d", function()
+        opts.page = "dev"
         pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
 end
