@@ -209,13 +209,20 @@ function flex.ui.init.endUI(winID, autocmdID) end
 ---shows the nvim stats menu on a buffer
 function flex.ui.init.nvimDevStatsMenu(db, buf, win_width, nsID) end
 
+---@param db flex.database.git
+---@param buf integer the buffer number
+---@param win_width integer the window width
+---@param nsID integer the nsid of the color namespace for flexstats
+---shows the git stats menu on a buffer
+function flex.ui.init.gitStatsMenu(db, buf, win_width, nsID) end
+
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80
 ---@field nsID integer
 ---@field page flex.ui.init.showUIOpts.page?
 
----@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"
+---@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"|"git"
 
 ---@class flex.ui.utils
 flex.ui.utils = {}

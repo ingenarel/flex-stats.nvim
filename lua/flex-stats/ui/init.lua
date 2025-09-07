@@ -38,6 +38,22 @@ function m.nvimDevStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
+function m.gitStatsMenu(db, buf, win_width, nsID)
+    local setupOpts = require("flex-stats").setupOpts
+    db = vim.deepcopy(db)
+    db = utils.fileStatsMenu1stPass(db, nsID)
+    table.sort(db, function(element1, element2)
+        return (element1.totalTime > element2.totalTime)
+    end)
+    db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
+    db = utils.fileStatsMenu3rdPass(db)
+    db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)
+    db = utils.addMaps(db, win_width, "git")
+    vim.bo[buf].modifiable = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
+    vim.bo[buf].modifiable = false
+end
+
 function m.endUI(winID, autocmdID)
     vim.api.nvim_win_close(winID, false)
     vim.api.nvim_del_autocmd(autocmdID)
@@ -80,6 +96,11 @@ function m.showUI(opts)
                 m.nvimDevStatsMenu(db.nvim, bufID, win_width, opts.nsID)
             end)
         end,
+        git = function()
+            vim.schedule(function()
+                m.gitStatsMenu(db.git, bufID, win_width, opts.nsID)
+            end)
+        end,
     }
     pages[opts.page]()
     local autocmdID
@@ -105,6 +126,10 @@ function m.showUI(opts)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "d", function()
         opts.page = "dev"
+        pages[opts.page]()
+    end, { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "g", function()
+        opts.page = "git"
         pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
 end
