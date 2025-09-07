@@ -76,6 +76,7 @@ function flex.core.timer.endIdleTime(filetype, database) end
 
 ---@class flex.database.nvim
 ---@field configStats flex.database.fileData
+---@field pluginStats flex.database.fileData
 
 ---module containing migrating functions
 ---@class flex.core.migrate
@@ -133,6 +134,7 @@ function flex.init.setup(opts) end
 ---@field fileStatsGradientMax integer
 ---@field nsID integer?
 ---@field saveInterval integer should be in milliseconds
+---@field pluginRegexes string[]
 
 ---to show the stats
 function flex.init.showStats() end
@@ -140,6 +142,8 @@ function flex.init.showStats() end
 ---@class flex.init.sharedValues
 ---@field autocmd flex.init.sharedValues.autocmd
 ---@field timer uv.uv_timer_t?
+---@field config string the actual vim config path following symlinks
+---@field data string the actual vim data path following symlinks
 
 ---@class flex.init.sharedValues.autocmd
 ---@field groupID integer?

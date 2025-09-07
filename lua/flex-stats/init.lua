@@ -1,3 +1,7 @@
+local actualConfig = vim.fn.stdpath("config")
+actualConfig = vim.uv.fs_realpath(actualConfig) or actualConfig
+local actualData = vim.fn.stdpath("data")
+actualData = vim.uv.fs_realpath(actualData) or actualData
 ---@type flex.init
 local m = {
     setupOpts = {
@@ -23,6 +27,10 @@ local m = {
             "typr",
             "typrstats",
         },
+        pluginRegexes = {
+            "[%-.]nvim/",
+            "/nvim[%-.]",
+        },
         indentDriftForIcon = 2,
         gap = 5,
         fileStatsGradientMax = 360000,
@@ -30,6 +38,8 @@ local m = {
     },
     sharedValues = {
         autocmd = {},
+        config = actualConfig,
+        data = actualData,
     },
 }
 
