@@ -112,7 +112,7 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
             for _ = #fp[#fp], 6 do
                 table.insert(fp[#fp], "")
             end
-            fp[#fp].writingTime = active
+            fp[#fp].totalTime = total
         end
     end
     return fp
