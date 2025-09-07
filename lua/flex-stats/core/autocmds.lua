@@ -26,14 +26,15 @@ local function modeCheck(filetype, db)
 end
 
 ---@param func function
-local function configCheck(func)
-    if string.find(vim.fn.expand("%:p"), sharedValues.config, 1, true) then
+---@param file string
+local function configCheck(func, file)
+    if string.find(file, sharedValues.config, 1, true) then
         func()
     end
 end
 
-local function pluginCheck(func)
-    local file = vim.fn.expand("%:p")
+---@param file string
+local function pluginCheck(func, file)
     if not (string.find(file, sharedValues.data, 1, true) and string.find(file, vim.env.VIMRUNTIME, 1, true)) then
         for i = 1, #setupOpts.pluginRegexes do
             if string.find(file, setupOpts.pluginRegexes[i]) then
@@ -53,12 +54,13 @@ sharedValues.autocmd.BufEnterID = sharedValues.autocmd.BufEnterID
     or vim.api.nvim_create_autocmd("BufEnter", {
         callback = function()
             modeCheck(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 modeCheck("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
-            end)
+            end, file)
         end,
         group = "flex-stats.nvim",
         desc = "starts the timer based on the mode",
@@ -70,16 +72,17 @@ sharedValues.autocmd.BufLeaveID = sharedValues.autocmd.BufLeaveID
             timer.endMoveTime(nil, database.files)
             timer.endEditTime(nil, database.files)
             timer.endIdleTime(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 timer.endMoveTime("configStats", database.nvim)
                 timer.endEditTime("configStats", database.nvim)
                 timer.endIdleTime("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 timer.endMoveTime("pluginStats", database.nvim)
                 timer.endEditTime("pluginStats", database.nvim)
                 timer.endIdleTime("pluginStats", database.nvim)
-            end)
+            end, file)
         end,
         group = "flex-stats.nvim",
         desc = "stops all timers",
@@ -89,12 +92,13 @@ sharedValues.autocmd.ModeChangedID = sharedValues.autocmd.ModeChangedID
     or vim.api.nvim_create_autocmd("ModeChanged", {
         callback = function()
             modeCheck(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 modeCheck("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
-            end)
+            end, file)
         end,
         group = "flex-stats.nvim",
         desc = "starts the timer based on the mode",
@@ -105,14 +109,15 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
         callback = function()
             timer.endEditTime(nil, database.files)
             timer.startIdleTime(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 timer.endEditTime("configStats", database.nvim)
                 timer.startIdleTime("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 timer.endEditTime("pluginStats", database.nvim)
                 timer.startIdleTime("pluginStats", database.nvim)
-            end)
+            end, file)
             sharedValues.autocmd.CursorMovedI_ID = sharedValues.autocmd.CursorMovedI_ID
                 or vim.api.nvim_create_autocmd("CursorMovedI", {
                     callback = function()
@@ -121,11 +126,11 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
                         configCheck(function()
                             timer.startEditTime("configStats", database.nvim)
                             timer.endIdleTime("configStats", database.nvim)
-                        end)
+                        end, file)
                         pluginCheck(function()
                             timer.startEditTime("pluginStats", database.nvim)
                             timer.endIdleTime("pluginStats", database.nvim)
-                        end)
+                        end, file)
                         vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMovedI_ID)
                         sharedValues.autocmd.CursorMovedI_ID = nil
                     end,
@@ -142,14 +147,15 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
         callback = function()
             timer.endMoveTime(nil, database.files)
             timer.startIdleTime(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 timer.endMoveTime("configStats", database.nvim)
                 timer.startIdleTime("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 timer.endMoveTime("pluginStats", database.nvim)
                 timer.startIdleTime("pluginStats", database.nvim)
-            end)
+            end, file)
             sharedValues.autocmd.CursorMoved_ID = sharedValues.autocmd.CursorMoved_ID
                 or vim.api.nvim_create_autocmd("CursorMoved", {
                     callback = function()
@@ -158,11 +164,11 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
                         configCheck(function()
                             timer.startMoveTime("configStats", database.nvim)
                             timer.endIdleTime("configStats", database.nvim)
-                        end)
+                        end, file)
                         pluginCheck(function()
                             timer.startMoveTime("pluginStats", database.nvim)
                             timer.endIdleTime("pluginStats", database.nvim)
-                        end)
+                        end, file)
                         vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMoved_ID)
                         sharedValues.autocmd.CursorMoved_ID = nil
                     end,
@@ -190,11 +196,12 @@ _ = sharedValues.timer:is_active()
         write(database)
         vim.schedule(function()
             modeCheck(nil, database.files)
+            local file = vim.fn.expand("%:p")
             configCheck(function()
                 modeCheck("configStats", database.nvim)
-            end)
+            end, file)
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
-            end)
+            end, file)
         end)
     end)
