@@ -25,11 +25,7 @@ end
 function m.nvimStatsMenu(db, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     db = vim.deepcopy(db)
-    db = utils.fileStatsMenu1stPass(
-        db,
-        nsID,
-        { oldFileName = "configStats", newFileName = "Config", icon = "", color = "#00CF00", nameColor = "#ff0000" }
-    )
+    db = utils.fileStatsMenu1stPass(db, nsID, setupOpts.nameOverrides)
     db = utils.fileStatsMenu2ndPass(db, win_width, setupOpts.indentDriftForIcon, setupOpts.gap)
     db = utils.fileStatsMenu3rdPass(db)
     db = utils.fileStatsMenu4thPass(db, win_width, setupOpts.indentDriftForIcon)

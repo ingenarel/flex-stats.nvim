@@ -60,35 +60,30 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
         local total = active + idle
         if total > 0 then
             table.insert(fp, {})
-            local fileNameString
-            if opts.oldFileName == lang then
-                lang = opts.newFileName
+            ---@type string, string, string
+            local actualIconColor, actualIcon, actualNameColor
+            for i = 1, #opts do
+                if opts[i].oldFileName == lang then
+                    lang = opts[i].newFileName or opts[i].oldFileName
+                    actualIconColor = opts[i].iconColor
+                    actualIcon = opts[i].icon
+                    actualNameColor = opts[i].nameColor
+                    break
+                end
             end
-            ---@cast lang string
-            local icon, color = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
-            if not icon then
-                icon = ""
-                color = "#939393"
-            end
+            local tmpIcon, tmpColor = require("nvim-web-devicons").get_icon_color_by_filetype(lang)
+            actualIconColor = actualIconColor or tmpColor or "#939393"
+            actualIcon = actualIcon or tmpIcon or ""
+            actualNameColor = actualNameColor or actualIconColor
 
-            if opts.icon then
-                icon = opts.icon
-            end
-            if opts.color then
-                color = opts.color
-            end
-            ---@cast color string
-
-            fileNameString = icon .. " " .. lang
+            local fileNameString = actualIcon .. " " .. lang
             table.insert(fp[#fp], fileNameString)
-            color = string.gsub(color, "#", "")
-            vim.api.nvim_set_hl(nsID, color, { fg = "#" .. color, underline = true })
-            vim.fn.matchadd(color, fileNameString)
-            if opts.nameColor then
-                opts.nameColor = string.gsub(opts.nameColor, "#", "")
-                vim.api.nvim_set_hl(nsID, opts.nameColor, { fg = "#" .. opts.nameColor, underline = true })
-                vim.fn.matchadd(opts.nameColor, lang)
-            end
+            actualIconColor = string.gsub(actualIconColor, "#", "")
+            actualNameColor = string.gsub(actualNameColor, "#", "")
+            vim.api.nvim_set_hl(nsID, actualIconColor, { fg = "#" .. actualIconColor, underline = true })
+            vim.api.nvim_set_hl(nsID, actualNameColor, { fg = "#" .. actualNameColor, underline = true })
+            vim.fn.matchadd(actualNameColor, fileNameString)
+            vim.fn.matchadd(actualIconColor, actualIcon)
 
             local totalString = "Total: " .. m.time(total)
             table.insert(fp[#fp], totalString)

@@ -31,6 +31,22 @@ local m = {
             "[%-.]nvim/",
             "/nvim[%-.]",
         },
+        nameOverrides = {
+            {
+                oldFileName = "configStats",
+                newFileName = "Config",
+                icon = "",
+                iconColor = "#00CF00",
+                nameColor = "#ff0000",
+            },
+            {
+                oldFileName = "pluginStats",
+                newFileName = "Plugin",
+                icon = "",
+                iconColor = "#00CF00",
+                nameColor = "#ff0000",
+            },
+        },
         indentDriftForIcon = 2,
         gap = 5,
         fileStatsGradientMax = 360000,

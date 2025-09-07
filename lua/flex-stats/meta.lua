@@ -135,6 +135,14 @@ function flex.init.setup(opts) end
 ---@field nsID integer?
 ---@field saveInterval integer should be in milliseconds
 ---@field pluginRegexes string[]
+---@field nameOverrides flex.init.setupOpts.nameOverride[]
+
+---@class flex.init.setupOpts.nameOverride
+---@field oldFileName string
+---@field newFileName string?
+---@field icon string?
+---@field iconColor string?
+---@field nameColor string?
 
 ---to show the stats
 function flex.init.showStats() end
@@ -219,17 +227,10 @@ function flex.ui.utils.center(input, width, char) end
 
 ---@param db flex.database.files|flex.database.nvim
 ---@param nsID integer the nsid of the color namespace for flexstats
----@param opts flex.ui.utils.fileStatsMenu1stPassOpts? optional options
+---@param opts flex.init.setupOpts.nameOverride[]? optional opts
 ---@return flex.ui.utils.fileStatsMenu1stPassReturn[]
 ---@nodiscard
 function flex.ui.utils.fileStatsMenu1stPass(db, nsID, opts) end
-
----@class flex.ui.utils.fileStatsMenu1stPassOpts
----@field oldFileName string?
----@field newFileName string?
----@field icon string?
----@field color string?
----@field nameColor string?
 
 ---@class flex.ui.utils.fileStatsMenu1stPassReturn
 ---@field [1] string file icon and name
