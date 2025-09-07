@@ -8,6 +8,8 @@ local write = require("flex-stats.core.db").writeDataBase
 local sharedValues = require("flex-stats").sharedValues
 local setupOpts = require("flex-stats").setupOpts
 
+---@param filetype flex.filetype?
+---@param db timerInput
 local function modeCheck(filetype, db)
     local currentMode = string.lower(vim.fn.mode())
     if string.find(currentMode, "i") or string.find(currentMode, "r") then
@@ -22,6 +24,7 @@ local function modeCheck(filetype, db)
     end
 end
 
+---@param func function
 local function configCheck(func)
     ---@diagnostic disable-next-line: param-type-mismatch
     if string.find(vim.fn.expand("%:p"), vim.uv.fs_realpath(vim.fn.stdpath("config"))) then

@@ -14,7 +14,7 @@ flex.core.timer = {}
 
 ---name of the filetype. should be accessible via vim.opt.filetype
 ---@alias flex.filetype string
----@alias timerInput flex.database|flex.database.nvim
+---@alias timerInput flex.database.files|flex.database.nvim
 
 ---@param filetype flex.filetype
 ---@param database timerInput
@@ -60,14 +60,16 @@ function flex.core.timer.endIdleTime(filetype, database) end
 ---table with the filetypes as a string, then the value should be the filetype's
 ---data
 ---@class flex.database
----@field files table<flex.filetype, flex.database.fileData|{}>
+---@field files flex.database.files
 ---@field nvim flex.database.nvim
+
+---@alias flex.database.files table<flex.filetype, flex.database.fileData|{}>
 
 ---table containing the filetype's data
 ---@class flex.database.fileData
 ---@field editTotalTime integer total time that has been spent on editing
 ---@field moveTotalTime integer total time that has been spent on moving around
----@field lastIdleTime integer?
+---@field idleTotalTime integer?
 ---@field lastMoveEnter integer? last time movement started to happen
 ---@field lastEditEnter integer? last time editing started to happen
 ---@field lastIdleEnter integer?
@@ -211,7 +213,7 @@ function flex.ui.utils.time(seconds) end
 ---centers a string to fit inside the middle of the width
 function flex.ui.utils.center(input, width, char) end
 
----@param db flex.database|flex.database.nvim
+---@param db flex.database.files|flex.database.nvim
 ---@param nsID integer the nsid of the color namespace for flexstats
 ---@param opts flex.ui.utils.fileStatsMenu1stPassOpts? optional options
 ---@return flex.ui.utils.fileStatsMenu1stPassReturn[]
