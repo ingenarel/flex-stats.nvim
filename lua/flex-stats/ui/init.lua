@@ -38,10 +38,8 @@ function m.nvimDevStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
-function m.endUI(autocmdID)
-    vim.schedule(function()
-        vim.cmd.q()
-    end)
+function m.endUI(winID, autocmdID)
+    vim.api.nvim_win_close(winID, false)
     vim.api.nvim_del_autocmd(autocmdID)
 end
 
@@ -84,23 +82,22 @@ function m.showUI(opts)
         end,
     }
     pages[opts.page]()
-    local autocmdID = {}
-    autocmdID[1] = vim.api.nvim_create_autocmd("VimResized", {
+    local autocmdID
+    autocmdID = vim.api.nvim_create_autocmd("VimResized", {
         callback = function()
-            vim.api.nvim_del_autocmd(autocmdID[1])
-            vim.cmd.q()
             vim.schedule(function()
                 m.showUI(opts)
             end)
+            m.endUI(winID, autocmdID)
         end,
         group = "flex-stats.nvim",
         desc = "redraw the window",
     })
     vim.keymap.set("n", "<ESC>", function()
-        m.endUI(autocmdID[1])
+        m.endUI(winID, autocmdID)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "q", function()
-        m.endUI(autocmdID[1])
+        m.endUI(winID, autocmdID)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "f", function()
         opts.page = "file"

@@ -195,8 +195,9 @@ function flex.ui.init.fileStatsMenu(db, buf, win_width, nsID) end
 ---opens the ui
 function flex.ui.init.showUI(opts) end
 
+---@param winID integer
 ---@param autocmdID integer
-function flex.ui.init.endUI(autocmdID) end
+function flex.ui.init.endUI(winID, autocmdID) end
 
 ---@param db flex.database.nvim
 ---@param buf integer the buffer number
