@@ -232,6 +232,10 @@ function m.fileStatsMenu4thPassEdgeGapEqualize(db, x, indentDriftForIcon, win_wi
 end
 
 function m.fileStatsMenu4thPass(db, win_width, indentDriftForIcon)
+    if #db == 0 then
+        local line = "Nothing to show here"
+        return { string.rep(" ", (win_width - #line) / 2) .. line }
+    end
     local lines = {}
     for x = 1, #db - 1 do
         m.fileStatsMenu4thPassNoEdgeGapEqualize(db, x, indentDriftForIcon, win_width, lines)
