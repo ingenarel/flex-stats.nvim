@@ -14,7 +14,7 @@ flex.core.timer = {}
 
 ---name of the filetype. should be accessible via vim.opt.filetype
 ---@alias flex.filetype string
----@alias timerInput flex.database.files|flex.database.nvim
+---@alias timerInput flex.database.files|flex.database.nvim|flex.database.git
 
 ---@param filetype flex.filetype
 ---@param database timerInput
@@ -62,8 +62,10 @@ function flex.core.timer.endIdleTime(filetype, database) end
 ---@class flex.database
 ---@field files flex.database.files
 ---@field nvim flex.database.nvim
+---@field git flex.database.git
 
 ---@alias flex.database.files table<flex.filetype, flex.database.fileData|{}>
+---@alias flex.database.git table<flex.filetype, flex.database.fileData|{}>
 
 ---table containing the filetype's data
 ---@class flex.database.fileData
@@ -152,6 +154,7 @@ function flex.init.showStats() end
 ---@field timer uv.uv_timer_t?
 ---@field config string the actual vim config path following symlinks
 ---@field data string the actual vim data path following symlinks
+---@field lastGitRepoName string
 
 ---@class flex.init.sharedValues.autocmd
 ---@field groupID integer?

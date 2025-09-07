@@ -2,6 +2,7 @@ local timer = require("flex-stats.core.timer")
 local database = require("flex-stats").database or {}
 database.files = database.files or {}
 database.nvim = database.nvim or {}
+database.git = database.git or {}
 database.nvim.configStats = database.nvim.configStats or {}
 database.nvim.pluginStats = database.nvim.pluginStats or {}
 local delete = require("flex-stats.core.lock").delete
@@ -45,6 +46,19 @@ local function pluginCheck(func, file)
     end
 end
 
+local function gitCheck(file)
+    if sharedValues.lastGitRepoName ~= "" and string.find(file, sharedValues.lastGitRepoName, 1, true) then
+        return sharedValues.lastGitRepoName
+    end
+    for dir in vim.fs.parents(file) do
+        if vim.uv.fs_stat(vim.fs.joinpath(dir, ".git")) then
+            file = vim.fs.basename(vim.uv.fs_realpath(dir))
+            sharedValues.lastGitRepoName = file or ""
+            return file
+        end
+    end
+end
+
 sharedValues.autocmd.groupID = sharedValues.autocmd.groupID
     or vim.api.nvim_create_augroup("flex-stats.nvim", {
         clear = false,
@@ -61,6 +75,10 @@ sharedValues.autocmd.BufEnterID = sharedValues.autocmd.BufEnterID
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                modeCheck(repo, database.git)
+            end
         end,
         group = "flex-stats.nvim",
         desc = "starts the timer based on the mode",
@@ -83,6 +101,12 @@ sharedValues.autocmd.BufLeaveID = sharedValues.autocmd.BufLeaveID
                 timer.endEditTime("pluginStats", database.nvim)
                 timer.endIdleTime("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                timer.endMoveTime(repo, database.git)
+                timer.endEditTime(repo, database.git)
+                timer.endIdleTime(repo, database.git)
+            end
         end,
         group = "flex-stats.nvim",
         desc = "stops all timers",
@@ -99,6 +123,10 @@ sharedValues.autocmd.ModeChangedID = sharedValues.autocmd.ModeChangedID
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                modeCheck(repo, database.git)
+            end
         end,
         group = "flex-stats.nvim",
         desc = "starts the timer based on the mode",
@@ -118,6 +146,11 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
                 timer.endEditTime("pluginStats", database.nvim)
                 timer.startIdleTime("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                timer.endEditTime(repo, database.git)
+                timer.startIdleTime(repo, database.git)
+            end
             sharedValues.autocmd.CursorMovedI_ID = sharedValues.autocmd.CursorMovedI_ID
                 or vim.api.nvim_create_autocmd("CursorMovedI", {
                     callback = function()
@@ -131,6 +164,10 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
                             timer.startEditTime("pluginStats", database.nvim)
                             timer.endIdleTime("pluginStats", database.nvim)
                         end, file)
+                        if repo then
+                            timer.startEditTime(repo, database.git)
+                            timer.endIdleTime(repo, database.git)
+                        end
                         vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMovedI_ID)
                         sharedValues.autocmd.CursorMovedI_ID = nil
                     end,
@@ -156,6 +193,11 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
                 timer.endMoveTime("pluginStats", database.nvim)
                 timer.startIdleTime("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                timer.endMoveTime(repo, database.git)
+                timer.startIdleTime(repo, database.git)
+            end
             sharedValues.autocmd.CursorMoved_ID = sharedValues.autocmd.CursorMoved_ID
                 or vim.api.nvim_create_autocmd("CursorMoved", {
                     callback = function()
@@ -169,6 +211,10 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
                             timer.startMoveTime("pluginStats", database.nvim)
                             timer.endIdleTime("pluginStats", database.nvim)
                         end, file)
+                        if repo then
+                            timer.startMoveTime(repo, database.git)
+                            timer.endIdleTime(repo, database.git)
+                        end
                         vim.api.nvim_del_autocmd(sharedValues.autocmd.CursorMoved_ID)
                         sharedValues.autocmd.CursorMoved_ID = nil
                     end,
@@ -203,5 +249,9 @@ _ = sharedValues.timer:is_active()
             pluginCheck(function()
                 modeCheck("pluginStats", database.nvim)
             end, file)
+            local repo = gitCheck(file)
+            if repo then
+                modeCheck(repo, database.git)
+            end
         end)
     end)

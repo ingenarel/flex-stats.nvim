@@ -56,6 +56,7 @@ local m = {
         autocmd = {},
         config = actualConfig,
         data = actualData,
+        lastGitRepoName = "",
     },
 }
 
