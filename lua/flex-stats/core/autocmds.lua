@@ -26,7 +26,6 @@ end
 local function configCheck(func)
     ---@diagnostic disable-next-line: param-type-mismatch
     if string.find(vim.fn.expand("%:p"), vim.uv.fs_realpath(vim.fn.stdpath("config"))) then
-        print("in vim config")
         func()
     end
 end
