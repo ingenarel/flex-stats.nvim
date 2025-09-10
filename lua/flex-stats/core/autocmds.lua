@@ -50,12 +50,10 @@ local function gitCheck(file)
     if sharedValues.lastGitRepoName ~= "" and string.find(file, sharedValues.lastGitRepoName, 1, true) then
         return sharedValues.lastGitRepoName
     end
-    for dir in vim.fs.parents(file) do
-        if vim.uv.fs_stat(vim.fs.joinpath(dir, ".git")) then
-            file = vim.fs.basename(vim.uv.fs_realpath(dir))
-            sharedValues.lastGitRepoName = file or ""
-            return file
-        end
+    local gitRoot = require("flex-stats.core.utils").gitRoot(file)
+    if gitRoot then
+        sharedValues.lastGitRepoName = vim.fs.basename(gitRoot) or ""
+        return sharedValues.lastGitRepoName
     end
 end
 

@@ -314,3 +314,11 @@ function flex.core.lock.create() end
 
 ---delete the lockfile
 function flex.core.lock.delete() end
+
+---@class flex.core.utils
+flex.core.utils = {}
+
+---@param file string the full file path
+---@return string|nil git_root returns the git root dir if it exists,
+---@nodiscard
+function flex.core.utils.gitRoot(file) end
