@@ -154,7 +154,9 @@ function flex.init.showStats() end
 ---@field timer uv.uv_timer_t?
 ---@field config string the actual vim config path following symlinks
 ---@field data string the actual vim data path following symlinks
----@field lastGitRepoName string
+---@field fileValues flex.init.sharedValues.fileValues
+
+---@alias flex.init.sharedValues.fileValues table<string, ({[1]: string}|false|nil)>
 
 ---@class flex.init.sharedValues.autocmd
 ---@field groupID integer?
@@ -322,3 +324,13 @@ flex.core.utils = {}
 ---@return string|nil git_root returns the git root dir if it exists,
 ---@nodiscard
 function flex.core.utils.gitRoot(file) end
+
+---@param root string
+---@return string[]|nil git_files returns the git files returned by system
+---command `git ls-files`
+---@nodiscard
+function flex.core.utils.gitLs(root) end
+
+---@param file string
+---@param fileValues flex.init.sharedValues.fileValues
+function flex.core.utils.setFileValues(file, fileValues) end

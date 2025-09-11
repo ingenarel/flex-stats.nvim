@@ -12,4 +12,34 @@ function m.gitRoot(file)
     end
 end
 
+function m.gitLs(root)
+    local files = {}
+    local out = vim.system({ "git", "-C", root, "ls-files" }):wait()
+    if out.code == 0 and out.stdout then
+        for file in vim.gsplit(out.stdout, "\n") do
+            if file ~= "" then
+                table.insert(files, vim.fs.joinpath(root, file))
+            end
+        end
+        return files
+    end
+end
+
+function m.setFileValues(file, fileValues)
+    if fileValues[file] == nil then
+        local root = m.gitRoot(file)
+        if root then
+            local files = m.gitLs(root)
+            if files then
+                fileValues[files[1]] = { root }
+                for i = 2, #files do
+                    fileValues[files[i]] = fileValues[files[1]]
+                end
+            end
+        else
+            fileValues[file] = false
+        end
+    end
+end
+
 return m

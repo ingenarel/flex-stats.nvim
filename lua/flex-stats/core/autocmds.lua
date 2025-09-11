@@ -9,6 +9,7 @@ local delete = require("flex-stats.core.lock").delete
 local write = require("flex-stats.core.db").writeDataBase
 local sharedValues = require("flex-stats").sharedValues
 local setupOpts = require("flex-stats").setupOpts
+local utils = require("flex-stats.core.utils")
 
 ---@param filetype flex.filetype?
 ---@param db timerInput
@@ -47,13 +48,11 @@ local function pluginCheck(func, file)
 end
 
 local function gitCheck(file)
-    if sharedValues.lastGitRepoName ~= "" and string.find(file, sharedValues.lastGitRepoName, 1, true) then
-        return sharedValues.lastGitRepoName
-    end
-    local gitRoot = require("flex-stats.core.utils").gitRoot(file)
-    if gitRoot then
-        sharedValues.lastGitRepoName = vim.fs.basename(gitRoot) or ""
-        return sharedValues.lastGitRepoName
+    if file and file ~= "" then
+        utils.setFileValues(file, sharedValues.fileValues)
+        if sharedValues.fileValues[file] then
+            return sharedValues.fileValues[file][1]
+        end
     end
 end
 
