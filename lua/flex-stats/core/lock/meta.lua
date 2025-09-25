@@ -1,5 +1,7 @@
 ---@meta
 
+-- vim:set textwidth=81:
+
 ---@class flex.core.lock
 local m = {}
 

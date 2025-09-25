@@ -1,5 +1,7 @@
 ---@meta
 
+-- vim:set textwidth=81:
+
 ---the module containing the database functions
 ---@class flex.core.db
 local m = {}

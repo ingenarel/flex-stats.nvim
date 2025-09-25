@@ -1,5 +1,7 @@
 ---@meta
 
+-- vim:set textwidth=81:
+
 ---@class flex.ui.init
 local m = {}
 
@@ -18,7 +20,7 @@ function m.showUI(opts) end
 ---@param autocmdID integer
 function m.endUI(winID, autocmdID) end
 
----@param db flex.database.nvim
+---@param db flex.database.dev
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats

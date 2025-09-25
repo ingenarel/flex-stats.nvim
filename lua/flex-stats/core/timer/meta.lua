@@ -1,5 +1,7 @@
 ---@meta
 
+-- vim:set textwidth=81:
+
 ---module containing the timer functions such as starting and ending moving and
 ---edit time in the database
 ---@class flex.core.timer
@@ -7,7 +9,7 @@ local m = {}
 
 ---name of the filetype. should be accessible via vim.opt.filetype
 ---@alias flex.filetype string
----@alias timerInput flex.database.files|flex.database.nvim|flex.database.git
+---@alias timerInput flex.database.files|flex.database.dev|flex.database.git
 
 ---@param filetype flex.filetype
 ---@param database timerInput

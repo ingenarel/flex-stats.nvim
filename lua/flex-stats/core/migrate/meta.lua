@@ -1,5 +1,7 @@
 ---@meta
 
+-- vim:set textwidth=81:
+
 ---module containing migrating functions
 ---@class flex.core.migrate
 local m = {}

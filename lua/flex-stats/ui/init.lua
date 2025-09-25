@@ -93,7 +93,7 @@ function m.showUI(opts)
         end,
         dev = function()
             vim.schedule(function()
-                m.nvimDevStatsMenu(db.nvim, bufID, win_width, opts.nsID)
+                m.nvimDevStatsMenu(db.dev, bufID, win_width, opts.nsID)
             end)
         end,
         git = function()

@@ -1,3 +1,7 @@
+---@meta
+
+-- vim:set textwidth=81:
+
 ---@class flex.ui.utils
 local m = {}
 
@@ -12,7 +16,7 @@ function m.time(seconds) end
 ---centers a string to fit inside the middle of the width
 function m.center(input, width, char) end
 
----@param db flex.database.files|flex.database.nvim
+---@param db flex.database.files|flex.database.dev
 ---@param nsID integer the nsid of the color namespace for flexstats
 ---@param opts flex.init.setupOpts.nameOverride[]? optional opts
 ---@return m.fileStatsMenu1stPassReturn[]

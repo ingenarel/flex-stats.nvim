@@ -1,10 +1,10 @@
 local timer = require("flex-stats.core.timer")
 local database = require("flex-stats").database or {}
 database.files = database.files or {}
-database.nvim = database.nvim or {}
+database.dev = database.dev or {}
 database.git = database.git or {}
-database.nvim.configStats = database.nvim.configStats or {}
-database.nvim.pluginStats = database.nvim.pluginStats or {}
+database.dev.configStats = database.dev.configStats or {}
+database.dev.pluginStats = database.dev.pluginStats or {}
 local delete = require("flex-stats.core.lock").delete
 local write = require("flex-stats.core.db").writeDataBase
 local sharedValues = require("flex-stats").sharedValues
@@ -67,10 +67,10 @@ sharedValues.autocmd.BufEnterID = sharedValues.autocmd.BufEnterID
             modeCheck(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                modeCheck("configStats", database.nvim)
+                modeCheck("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                modeCheck("pluginStats", database.nvim)
+                modeCheck("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then
@@ -89,14 +89,14 @@ sharedValues.autocmd.BufLeaveID = sharedValues.autocmd.BufLeaveID
             timer.endIdleTime(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                timer.endMoveTime("configStats", database.nvim)
-                timer.endEditTime("configStats", database.nvim)
-                timer.endIdleTime("configStats", database.nvim)
+                timer.endMoveTime("configStats", database.dev)
+                timer.endEditTime("configStats", database.dev)
+                timer.endIdleTime("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                timer.endMoveTime("pluginStats", database.nvim)
-                timer.endEditTime("pluginStats", database.nvim)
-                timer.endIdleTime("pluginStats", database.nvim)
+                timer.endMoveTime("pluginStats", database.dev)
+                timer.endEditTime("pluginStats", database.dev)
+                timer.endIdleTime("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then
@@ -115,10 +115,10 @@ sharedValues.autocmd.ModeChangedID = sharedValues.autocmd.ModeChangedID
             modeCheck(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                modeCheck("configStats", database.nvim)
+                modeCheck("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                modeCheck("pluginStats", database.nvim)
+                modeCheck("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then
@@ -136,12 +136,12 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
             timer.startIdleTime(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                timer.endEditTime("configStats", database.nvim)
-                timer.startIdleTime("configStats", database.nvim)
+                timer.endEditTime("configStats", database.dev)
+                timer.startIdleTime("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                timer.endEditTime("pluginStats", database.nvim)
-                timer.startIdleTime("pluginStats", database.nvim)
+                timer.endEditTime("pluginStats", database.dev)
+                timer.startIdleTime("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then
@@ -154,12 +154,12 @@ sharedValues.autocmd.CursorHoldI_ID = sharedValues.autocmd.CursorHoldI_ID
                         timer.startEditTime(nil, database.files)
                         timer.endIdleTime(nil, database.files)
                         configCheck(function()
-                            timer.startEditTime("configStats", database.nvim)
-                            timer.endIdleTime("configStats", database.nvim)
+                            timer.startEditTime("configStats", database.dev)
+                            timer.endIdleTime("configStats", database.dev)
                         end, file)
                         pluginCheck(function()
-                            timer.startEditTime("pluginStats", database.nvim)
-                            timer.endIdleTime("pluginStats", database.nvim)
+                            timer.startEditTime("pluginStats", database.dev)
+                            timer.endIdleTime("pluginStats", database.dev)
                         end, file)
                         if repo then
                             timer.startEditTime(repo, database.git)
@@ -183,12 +183,12 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
             timer.startIdleTime(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                timer.endMoveTime("configStats", database.nvim)
-                timer.startIdleTime("configStats", database.nvim)
+                timer.endMoveTime("configStats", database.dev)
+                timer.startIdleTime("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                timer.endMoveTime("pluginStats", database.nvim)
-                timer.startIdleTime("pluginStats", database.nvim)
+                timer.endMoveTime("pluginStats", database.dev)
+                timer.startIdleTime("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then
@@ -201,12 +201,12 @@ sharedValues.autocmd.CursorHold_ID = sharedValues.autocmd.CursorHold_ID
                         timer.startMoveTime(nil, database.files)
                         timer.endIdleTime(nil, database.files)
                         configCheck(function()
-                            timer.startMoveTime("configStats", database.nvim)
-                            timer.endIdleTime("configStats", database.nvim)
+                            timer.startMoveTime("configStats", database.dev)
+                            timer.endIdleTime("configStats", database.dev)
                         end, file)
                         pluginCheck(function()
-                            timer.startMoveTime("pluginStats", database.nvim)
-                            timer.endIdleTime("pluginStats", database.nvim)
+                            timer.startMoveTime("pluginStats", database.dev)
+                            timer.endIdleTime("pluginStats", database.dev)
                         end, file)
                         if repo then
                             timer.startMoveTime(repo, database.git)
@@ -241,10 +241,10 @@ _ = sharedValues.timer:is_active()
             modeCheck(nil, database.files)
             local file = vim.fn.expand("%:p")
             configCheck(function()
-                modeCheck("configStats", database.nvim)
+                modeCheck("configStats", database.dev)
             end, file)
             pluginCheck(function()
-                modeCheck("pluginStats", database.nvim)
+                modeCheck("pluginStats", database.dev)
             end, file)
             local repo = gitCheck(file)
             if repo then

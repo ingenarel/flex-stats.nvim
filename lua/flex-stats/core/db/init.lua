@@ -43,10 +43,10 @@ function m.writeDataBase(db)
         timer.endMoveTime(lang, db.files)
         timer.endIdleTime(lang, db.files)
     end
-    for lang, _ in pairs(db.nvim) do
-        timer.endEditTime(lang, db.nvim)
-        timer.endMoveTime(lang, db.nvim)
-        timer.endIdleTime(lang, db.nvim)
+    for lang, _ in pairs(db.dev) do
+        timer.endEditTime(lang, db.dev)
+        timer.endMoveTime(lang, db.dev)
+        timer.endIdleTime(lang, db.dev)
     end
     for repo, _ in pairs(db.git) do
         timer.endEditTime(repo, db.git)

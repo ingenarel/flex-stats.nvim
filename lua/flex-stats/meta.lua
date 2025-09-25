@@ -1,5 +1,6 @@
--- vim:set textwidth=81:
 ---@meta
+
+-- vim:set textwidth=81:
 
 local flex = {}
 
@@ -7,7 +8,7 @@ local flex = {}
 ---@class flex.database
 ---@field files flex.database.files table with the filetypes as a string, then
 ---the value should be the filetype's data
----@field nvim flex.database.nvim
+---@field dev flex.database.dev
 ---@field git flex.database.git
 
 ---@alias flex.database.files table<flex.filetype, flex.database.fileData|{}>
@@ -22,7 +23,7 @@ local flex = {}
 ---@field lastEditEnter integer? last time editing started to happen
 ---@field lastIdleEnter integer?
 
----@class flex.database.nvim
+---@class flex.database.dev
 ---@field configStats flex.database.fileData
 ---@field pluginStats flex.database.fileData
 
