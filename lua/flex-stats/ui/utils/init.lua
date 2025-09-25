@@ -250,6 +250,7 @@ function m.addMaps(lines, win_width, currentMenu)
         dev = " [d]ev ",
         git = " [g]it ",
         quit = " [q]uit ",
+        nvim = " [n]vim ",
     }
     vim.fn.matchadd("FlexStatsMenuItem", " \\[\\S\\]\\S\\+ ")
     local currentMenuHi = string.gsub(maps[currentMenu], "[%[%]]", "\\%1")

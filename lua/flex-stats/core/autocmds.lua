@@ -5,6 +5,8 @@ database.dev = database.dev or {}
 database.git = database.git or {}
 database.dev.configStats = database.dev.configStats or {}
 database.dev.pluginStats = database.dev.pluginStats or {}
+database.nvim = database.nvim or {}
+database.nvim.cmdTotalTime = database.nvim.cmdTotalTime or 0
 local delete = require("flex-stats.core.lock").delete
 local write = require("flex-stats.core.db").writeDataBase
 local sharedValues = require("flex-stats").sharedValues
@@ -231,6 +233,25 @@ sharedValues.autocmd.VimLeavePreID = sharedValues.autocmd.VimLeavePreID
         end,
         group = "flex-stats.nvim",
         desc = "writes the database",
+    })
+
+sharedValues.autocmd.CmdlineEnterID = sharedValues.autocmd.CmdlineEnterID
+    or vim.api.nvim_create_autocmd("CmdlineEnter", {
+        callback = function()
+            database.nvim.lastCmdEnter = os.time()
+        end,
+        group = "flex-stats.nvim",
+        desc = "starts cmdline timer",
+    })
+
+sharedValues.autocmd.CmdlineLeaveID = sharedValues.autocmd.CmdlineLeaveID
+    or vim.api.nvim_create_autocmd("CmdlineLeave", {
+        callback = function()
+            database.nvim.cmdTotalTime = database.nvim.cmdTotalTime + os.time() - database.nvim.lastCmdEnter
+            database.nvim.lastCmdEnter = nil
+        end,
+        group = "flex-stats.nvim",
+        desc = "ends cmdline timer",
     })
 
 sharedValues.timer = sharedValues.timer or vim.uv.new_timer()

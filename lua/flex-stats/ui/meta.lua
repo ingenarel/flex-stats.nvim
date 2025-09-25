@@ -34,10 +34,17 @@ function m.nvimDevStatsMenu(db, buf, win_width, nsID) end
 ---shows the git stats menu on a buffer
 function m.gitStatsMenu(db, buf, win_width, nsID) end
 
+---shows the git stats menu on a buffer
+---@param db flex.database.nvim
+---@param buf integer the buffer number
+---@param win_width integer the window width
+---@param nsID integer the nsid of the color namespace for flexstats
+function m.nvimStatsMenu(db, buf, win_width, nsID) end
+
 ---@class flex.ui.init.showUIOpts
 ---@field width integer? the window width, default is 80
 ---@field height integer? the window height, default is 80
 ---@field nsID integer
 ---@field page flex.ui.init.showUIOpts.page?
 
----@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"|"git"
+---@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"|"git"|"nvim"

@@ -10,6 +10,7 @@ local flex = {}
 ---the value should be the filetype's data
 ---@field dev flex.database.dev
 ---@field git flex.database.git
+---@field nvim flex.database.nvim
 
 ---@alias flex.database.files table<flex.filetype, flex.database.fileData|{}>
 ---@alias flex.database.git table<flex.filetype, flex.database.fileData|{}>
@@ -26,6 +27,10 @@ local flex = {}
 ---@class flex.database.dev
 ---@field configStats flex.database.fileData
 ---@field pluginStats flex.database.fileData
+
+---@class flex.database.nvim
+---@field cmdTotalTime integer?
+---@field lastCmdEnter integer?
 
 ---module containing the init functions
 ---@class flex.init
@@ -77,3 +82,5 @@ function flex.init.showStats() end
 ---@field CursorMovedI_ID integer?
 ---@field CursorMoved_ID integer?
 ---@field VimLeavePreID integer?
+---@field CmdlineEnterID integer?
+---@field CmdlineLeaveID integer?

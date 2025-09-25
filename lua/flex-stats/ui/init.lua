@@ -54,6 +54,21 @@ function m.gitStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
+function m.nvimStatsMenu(db, buf, win_width, nsID)
+    local setupOpts = require("flex-stats").setupOpts
+    local lines = {}
+    local time = utils.time(db.cmdTotalTime)
+    table.insert(lines, "Total time in Cmdline: " .. time)
+    for i = 1, #lines do
+        lines[i] = utils.center(lines[i], win_width)
+    end
+    lines = utils.addMaps(lines, win_width, "nvim")
+    vim.bo[buf].modifiable = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+    utils.colorString(time, utils.getColor(setupOpts.fileStatsGradientMax, db.cmdTotalTime), nsID)
+    vim.bo[buf].modifiable = false
+end
+
 function m.endUI(winID, autocmdID)
     vim.api.nvim_win_close(winID, false)
     vim.api.nvim_del_autocmd(autocmdID)
@@ -101,6 +116,11 @@ function m.showUI(opts)
                 m.gitStatsMenu(db.git, bufID, win_width, opts.nsID)
             end)
         end,
+        nvim = function()
+            vim.schedule(function()
+                m.nvimStatsMenu(db.nvim, bufID, win_width, opts.nsID)
+            end)
+        end,
     }
     pages[opts.page]()
     local autocmdID
@@ -130,6 +150,10 @@ function m.showUI(opts)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "g", function()
         opts.page = "git"
+        pages[opts.page]()
+    end, { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "n", function()
+        opts.page = "nvim"
         pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
 end
