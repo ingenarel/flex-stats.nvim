@@ -3,10 +3,10 @@
 
 local flex = {}
 
----table with the filetypes as a string, then the value should be the filetype's
----data
+---the main database containing times
 ---@class flex.database
----@field files flex.database.files
+---@field files flex.database.files table with the filetypes as a string, then
+---the value should be the filetype's data
 ---@field nvim flex.database.nvim
 ---@field git flex.database.git
 

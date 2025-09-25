@@ -6,7 +6,7 @@ local m = {}
 
 ---@param oldName string the old key to migrate from
 ---@param newName string the new key to migrate to
----@param database flex.database|table|nil optional database
+---@param database table<string, any>|nil optional database
 ---a key migration function
 ---if the database is `{ lua = { a = 1}, ..}` and you
 ---want to change the name of `a` to `b`, do keys("a", "b"), then the database
@@ -31,7 +31,7 @@ function m.setRecursiveKey(keys, value, tbl) end
 
 ---@param oldKeys string[]
 ---@param newKeys string[]
----@param db nil|flex.database|table
+---@param db table<string, any>|nil optional database
 ---a key migration function
 ---if the database is `{ x = 123 , ..}` and you want to move everything to
 ---`a` do moveDeeper(nil, {"a"}, nil), then the database should be `{ a = { x =
