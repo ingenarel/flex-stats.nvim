@@ -63,8 +63,8 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
             ---@type string, string, string
             local actualIconColor, actualIcon, actualNameColor
             for i = 1, #opts do
-                if opts[i].oldFileName == lang then
-                    lang = opts[i].newFileName or opts[i].oldFileName
+                if string.find(lang, opts[i].oldFileName) then
+                    lang, _ = string.gsub(lang, opts[i].oldFileName, opts[i].newFileName or opts[i].oldFileName)
                     actualIconColor = opts[i].iconColor
                     actualIcon = opts[i].icon
                     actualNameColor = opts[i].nameColor

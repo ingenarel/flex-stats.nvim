@@ -41,7 +41,7 @@ end
 function m.gitStatsMenu(db, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     db = vim.deepcopy(db)
-    db = utils.fileStatsMenu1stPass(db, nsID)
+    db = utils.fileStatsMenu1stPass(db, nsID, { { oldFileName = ".+/([^/]+)", newFileName = "%1" } })
     table.sort(db, function(element1, element2)
         return (element1.totalTime > element2.totalTime)
     end)
