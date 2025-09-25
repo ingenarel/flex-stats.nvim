@@ -255,15 +255,18 @@ function m.addMaps(lines, win_width, currentMenu)
     local currentMenuHi = string.gsub(maps[currentMenu], "[%[%]]", "\\%1")
     vim.fn.matchadd("FlexStatsCurrentMenu", currentMenuHi)
     local len = 0
-    local keys = 0
+    local tmpMaps = {}
     for _, value in pairs(maps) do
-        len = len + #value
-        keys = keys + 1
+        table.insert(tmpMaps, value)
     end
-    local gap = math.floor((win_width - len) / (keys + 1))
+    table.sort(tmpMaps)
+    for i = 1, #tmpMaps do
+        len = len + #tmpMaps[i]
+    end
+    local gap = math.floor((win_width - len) / (#tmpMaps + 1))
     local line = ""
-    for _, value in pairs(maps) do
-        line = line .. string.rep(" ", gap) .. value
+    for i = 1, #tmpMaps do
+        line = line .. string.rep(" ", gap) .. tmpMaps[i]
     end
     table.insert(output, line)
     table.insert(output, "")
