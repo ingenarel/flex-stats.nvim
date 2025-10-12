@@ -54,18 +54,26 @@ function m.gitStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
-function m.nvimStatsMenu(db, buf, win_width, nsID)
+function m.nvimStatsMenu(nvimDb, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     local lines = {}
-    local time = utils.time(db.cmdTotalTime)
-    table.insert(lines, "Total time in Cmdline: " .. time)
+
+    table.insert(lines, "Total time:")
+
+    local cmdString = "Cmdline: " .. utils.time(nvimDb.cmdTotalTime)
+    table.insert(lines, cmdString)
+    utils.colorString(cmdString, utils.getColor(setupOpts.fileStatsGradientMax, nvimDb.cmdTotalTime), nsID)
+
+    local useString = "Used Neovim: " .. utils.time(nvimDb.useTotalTime)
+    table.insert(lines, useString)
+    utils.colorString(useString, utils.getColor(setupOpts.fileStatsGradientMax, nvimDb.useTotalTime), nsID)
+
     for i = 1, #lines do
         lines[i] = utils.center(lines[i], win_width)
     end
     lines = utils.addMaps(lines, win_width, "nvim")
     vim.bo[buf].modifiable = true
     vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
-    utils.colorString(time, utils.getColor(setupOpts.fileStatsGradientMax, db.cmdTotalTime), nsID)
     vim.bo[buf].modifiable = false
 end
 

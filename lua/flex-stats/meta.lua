@@ -31,6 +31,8 @@ local flex = {}
 ---@class flex.database.nvim
 ---@field cmdTotalTime integer?
 ---@field lastCmdEnter integer?
+---@field useTotalTime integer?
+---@field lastUseCheck integer?
 
 ---module containing the init functions
 ---@class flex.init

@@ -53,6 +53,8 @@ function m.writeDataBase(db)
         timer.endMoveTime(repo, db.git)
         timer.endIdleTime(repo, db.git)
     end
+    db.nvim.useTotalTime = db.nvim.useTotalTime + (os.time() - db.nvim.lastUseCheck)
+    db.nvim.lastUseCheck = os.time()
     local outputJson = vim.json.encode(db)
     if outputJson ~= false then
         local file = io.open(vim.fn.stdpath("data") .. "/flex-stats/db.json", "w")
