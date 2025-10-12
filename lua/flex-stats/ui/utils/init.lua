@@ -52,13 +52,26 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
     opts = opts or {}
     local setupOpts = require("flex-stats").setupOpts
     local fp = {}
-    for lang, data in pairs(db) do
-        local moving = data["moveTotalTime"] or 0
-        local editing = data["editTotalTime"] or 0
-        local idle = data["idleTotalTime"] or 0
-        local active = moving + editing
-        local total = active + idle
-        if total > 0 then
+    for lang, langData in pairs(db) do
+        local totalMoving = 0
+        local totalEditing = 0
+        local totalIdle = 0
+
+        for _, dateData in pairs(langData) do
+            totalMoving = totalMoving + (dateData["moveTotalTime"] or 0)
+            totalEditing = totalEditing + (dateData["editTotalTime"] or 0)
+            totalIdle = totalIdle + (dateData["idleTotalTime"] or 0)
+        end
+
+        local totalActive = totalMoving + totalEditing
+        local totalTotalTime = totalActive + totalIdle
+
+        -- local totalMoving = langData["moveTotalTime"] or 0
+        -- local totalEditing = langData["editTotalTime"] or 0
+        -- local totalIdle = langData["idleTotalTime"] or 0
+        -- local totalActive = totalMoving + totalEditing
+        -- local totalTotalTime = totalActive + totalIdle
+        if totalTotalTime > 0 then
             table.insert(fp, {})
             ---@type string, string, string
             local actualIconColor, actualIcon, actualNameColor
@@ -85,34 +98,34 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
             vim.fn.matchadd(actualNameColor, fileNameString)
             vim.fn.matchadd(actualIconColor, actualIcon)
 
-            local totalString = "Total: " .. m.time(total)
+            local totalString = "Total: " .. m.time(totalTotalTime)
             table.insert(fp[#fp], totalString)
-            m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, total), nsID)
+            m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, totalTotalTime), nsID)
 
-            if editing > 0 then
-                local editString = "Editing: " .. m.time(editing)
+            if totalEditing > 0 then
+                local editString = "Editing: " .. m.time(totalEditing)
                 table.insert(fp[#fp], editString)
-                m.colorString(editString, m.getColor(setupOpts.fileStatsGradientMax, editing), nsID)
+                m.colorString(editString, m.getColor(setupOpts.fileStatsGradientMax, totalEditing), nsID)
             end
-            if moving > 0 then
-                local moveString = "Moving: " .. m.time(moving)
+            if totalMoving > 0 then
+                local moveString = "Moving: " .. m.time(totalMoving)
                 table.insert(fp[#fp], moveString)
-                m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, moving), nsID)
+                m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, totalMoving), nsID)
             end
-            if active > 0 then
-                local activeString = "Active: " .. m.time(active)
+            if totalActive > 0 then
+                local activeString = "Active: " .. m.time(totalActive)
                 table.insert(fp[#fp], activeString)
-                m.colorString(activeString, m.getColor(setupOpts.fileStatsGradientMax, active), nsID)
+                m.colorString(activeString, m.getColor(setupOpts.fileStatsGradientMax, totalActive), nsID)
             end
-            if idle > 0 then
-                local idleString = "Idle: " .. m.time(idle)
+            if totalIdle > 0 then
+                local idleString = "Idle: " .. m.time(totalIdle)
                 table.insert(fp[#fp], idleString)
-                m.colorString(idleString, m.getColor(setupOpts.fileStatsGradientMax, idle), nsID)
+                m.colorString(idleString, m.getColor(setupOpts.fileStatsGradientMax, totalIdle), nsID)
             end
             for _ = #fp[#fp], 6 do
                 table.insert(fp[#fp], "")
             end
-            fp[#fp].totalTime = total
+            fp[#fp].totalTime = totalTotalTime
         end
     end
     return fp

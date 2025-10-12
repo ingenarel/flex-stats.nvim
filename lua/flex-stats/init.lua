@@ -57,6 +57,8 @@ local m = {
         config = actualConfig,
         data = actualData,
         fileValues = {},
+        ---@diagnostic disable-next-line: assign-type-mismatch
+        date = os.date("%D"),
     },
 }
 

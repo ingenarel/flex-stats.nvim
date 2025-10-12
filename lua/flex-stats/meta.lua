@@ -69,6 +69,7 @@ function flex.init.showStats() end
 ---@field config string the actual vim config path following symlinks
 ---@field data string the actual vim data path following symlinks
 ---@field fileValues flex.init.sharedValues.fileValues
+---@field date string
 
 ---@alias flex.init.sharedValues.fileValues table<string, ({[1]: string}|false|nil)>
 

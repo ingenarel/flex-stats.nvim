@@ -258,6 +258,8 @@ sharedValues.timer = sharedValues.timer or vim.uv.new_timer()
 _ = sharedValues.timer:is_active()
     or sharedValues.timer:start(setupOpts.saveInterval, setupOpts.saveInterval, function()
         write(database)
+        ---@diagnostic disable-next-line: assign-type-mismatch
+        sharedValues.date = os.date("%D")
         vim.schedule(function()
             modeCheck(nil, database.files)
             local file = vim.fn.expand("%:p")
