@@ -54,7 +54,7 @@ function m.gitStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
-function m.nvimStatsMenu(nvimDb, buf, win_width, nsID)
+function m.nvimStatsMenu(nvimDb, fileDb, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     local lines = {}
 
@@ -67,6 +67,46 @@ function m.nvimStatsMenu(nvimDb, buf, win_width, nsID)
     local useString = "Used Neovim: " .. utils.time(nvimDb.useTotalTime)
     table.insert(lines, useString)
     utils.colorString(useString, utils.getColor(setupOpts.fileStatsGradientMax, nvimDb.useTotalTime), nsID)
+
+    if fileDb.TelescopePrompt then
+        local totalTelescopeTime = 0
+        for _, dateData in pairs(fileDb.TelescopePrompt) do
+            totalTelescopeTime = (dateData.editTotalTime or 0)
+                + (dateData.idleTotalTime or 0)
+                + (dateData.moveTotalTime or 0)
+        end
+        if totalTelescopeTime > 0 then
+            local telescopeString = "Used Telescope: " .. utils.time(totalTelescopeTime)
+            table.insert(lines, telescopeString)
+            utils.colorString(telescopeString, utils.getColor(setupOpts.fileStatsGradientMax, totalTelescopeTime), nsID)
+        end
+    end
+
+    if fileDb.help then
+        local totalHelpTime = 0
+        for _, dateData in pairs(fileDb.help) do
+            totalHelpTime = (dateData.editTotalTime or 0)
+                + (dateData.idleTotalTime or 0)
+                + (dateData.moveTotalTime or 0)
+        end
+        if totalHelpTime > 0 then
+            local telescopeString = "Read Help Files: " .. utils.time(totalHelpTime)
+            table.insert(lines, telescopeString)
+            utils.colorString(telescopeString, utils.getColor(setupOpts.fileStatsGradientMax, totalHelpTime), nsID)
+        end
+    end
+
+    if fileDb.man then
+        local totalManTime = 0
+        for _, dateData in pairs(fileDb.man) do
+            totalManTime = (dateData.editTotalTime or 0) + (dateData.idleTotalTime or 0) + (dateData.moveTotalTime or 0)
+        end
+        if totalManTime > 0 then
+            local telescopeString = "Read Man Files: " .. utils.time(totalManTime)
+            table.insert(lines, telescopeString)
+            utils.colorString(telescopeString, utils.getColor(setupOpts.fileStatsGradientMax, totalManTime), nsID)
+        end
+    end
 
     for i = 1, #lines do
         lines[i] = utils.center(lines[i], win_width)
@@ -126,7 +166,7 @@ function m.showUI(opts)
         end,
         nvim = function()
             vim.schedule(function()
-                m.nvimStatsMenu(db.nvim, bufID, win_width, opts.nsID)
+                m.nvimStatsMenu(db.nvim, db.files, bufID, win_width, opts.nsID)
             end)
         end,
     }

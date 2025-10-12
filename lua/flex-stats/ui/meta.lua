@@ -36,6 +36,7 @@ function m.gitStatsMenu(db, buf, win_width, nsID) end
 
 ---shows the git stats menu on a buffer
 ---@param nvimDb flex.database.nvim
+---@param fileDb flex.database.files
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats
