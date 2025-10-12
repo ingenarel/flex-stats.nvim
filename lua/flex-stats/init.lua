@@ -62,12 +62,9 @@ local m = {
     },
 }
 
-local db = require("flex-stats.core.db")
-local lock = require("flex-stats.core.lock")
-
 function m.setup(opts)
     if not vim.uv.fs_stat(vim.fn.stdpath("data") .. "/flex-stats/LOCKFILE") then
-        lock.create()
+        require("flex-stats.core.lock").create()
     else
         vim.notify(
             "LOCKFILE for flex-stats already exists\n"
@@ -82,7 +79,7 @@ function m.setup(opts)
     end
     opts = vim.tbl_deep_extend("force", m.setupOpts, opts)
     m.setupOpts = opts
-    m.database = db.readDataBase()
+    m.database = require("flex-stats.core.db").readDataBase()
     opts.nsID = opts.nsID or vim.api.nvim_create_namespace("FlexStats")
     require("flex-stats.core.autocmds")
     vim.api.nvim_create_user_command("Flex", function()
@@ -93,7 +90,7 @@ function m.setup(opts)
 end
 
 function m.showStats()
-    db.writeDataBase(m.database)
+    require("flex-stats.core.db").writeDataBase(m.database)
     require("flex-stats.ui").showUI { nsID = m.setupOpts.nsID }
 end
 
