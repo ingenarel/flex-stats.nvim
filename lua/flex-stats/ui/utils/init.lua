@@ -51,7 +51,8 @@ end
 function m.fileStatsMenu1stPass(db, nsID, opts)
     opts = opts or {}
     local setupOpts = require("flex-stats").setupOpts
-    local fp = {}
+    local firstPass = {}
+    local date = os.date("%D")
     for lang, langData in pairs(db) do
         local totalMoving = 0
         local totalEditing = 0
@@ -66,13 +67,8 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
         local totalActive = totalMoving + totalEditing
         local totalTotalTime = totalActive + totalIdle
 
-        -- local totalMoving = langData["moveTotalTime"] or 0
-        -- local totalEditing = langData["editTotalTime"] or 0
-        -- local totalIdle = langData["idleTotalTime"] or 0
-        -- local totalActive = totalMoving + totalEditing
-        -- local totalTotalTime = totalActive + totalIdle
         if totalTotalTime > 0 then
-            table.insert(fp, {})
+            table.insert(firstPass, {})
             ---@type string, string, string
             local actualIconColor, actualIcon, actualNameColor
             for i = 1, #opts do
@@ -90,7 +86,7 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
             actualNameColor = actualNameColor or actualIconColor
 
             local fileNameString = actualIcon .. " " .. lang
-            table.insert(fp[#fp], fileNameString)
+            table.insert(firstPass[#firstPass], fileNameString)
             actualIconColor = string.gsub(actualIconColor, "#", "")
             actualNameColor = string.gsub(actualNameColor, "#", "")
             vim.api.nvim_set_hl(nsID, actualIconColor, { fg = "#" .. actualIconColor, underline = true })
@@ -98,41 +94,82 @@ function m.fileStatsMenu1stPass(db, nsID, opts)
             vim.fn.matchadd(actualNameColor, fileNameString)
             vim.fn.matchadd(actualIconColor, actualIcon)
 
+            table.insert(firstPass[#firstPass], "")
+            table.insert(firstPass[#firstPass], "All Time:")
+
             local totalString = "Total: " .. m.time(totalTotalTime)
-            table.insert(fp[#fp], totalString)
+            table.insert(firstPass[#firstPass], totalString)
             m.colorString(totalString, m.getColor(setupOpts.fileStatsGradientMax, totalTotalTime), nsID)
 
             if totalEditing > 0 then
                 local editString = "Editing: " .. m.time(totalEditing)
-                table.insert(fp[#fp], editString)
+                table.insert(firstPass[#firstPass], editString)
                 m.colorString(editString, m.getColor(setupOpts.fileStatsGradientMax, totalEditing), nsID)
             end
             if totalMoving > 0 then
                 local moveString = "Moving: " .. m.time(totalMoving)
-                table.insert(fp[#fp], moveString)
+                table.insert(firstPass[#firstPass], moveString)
                 m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, totalMoving), nsID)
             end
             if totalActive > 0 then
                 local activeString = "Active: " .. m.time(totalActive)
-                table.insert(fp[#fp], activeString)
+                table.insert(firstPass[#firstPass], activeString)
                 m.colorString(activeString, m.getColor(setupOpts.fileStatsGradientMax, totalActive), nsID)
             end
             if totalIdle > 0 then
                 local idleString = "Idle: " .. m.time(totalIdle)
-                table.insert(fp[#fp], idleString)
+                table.insert(firstPass[#firstPass], idleString)
                 m.colorString(idleString, m.getColor(setupOpts.fileStatsGradientMax, totalIdle), nsID)
             end
-            for _ = #fp[#fp], 6 do
-                table.insert(fp[#fp], "")
+
+            local todayMoving = langData[date]["moveTotalTime"] or 0
+            local todayEditing = langData[date]["editTotalTime"] or 0
+            local todayIdle = langData[date]["idleTotalTime"] or 0
+
+            local todayActive = todayMoving + todayEditing
+            local todayTotalTime = todayActive + todayIdle
+
+            if todayTotalTime > 0 then
+                table.insert(firstPass[#firstPass], "")
+                table.insert(firstPass[#firstPass], "Today:")
+
+                local todayString = "Total: " .. m.time(todayTotalTime)
+                table.insert(firstPass[#firstPass], todayString)
+                m.colorString(todayString, m.getColor(setupOpts.fileStatsGradientMax, todayTotalTime), nsID)
+
+                if todayEditing > 0 then
+                    local editString = "Editing: " .. m.time(todayEditing)
+                    table.insert(firstPass[#firstPass], editString)
+                    m.colorString(editString, m.getColor(setupOpts.fileStatsGradientMax, todayEditing), nsID)
+                end
+                if todayMoving > 0 then
+                    local moveString = "Moving: " .. m.time(todayMoving)
+                    table.insert(firstPass[#firstPass], moveString)
+                    m.colorString(moveString, m.getColor(setupOpts.fileStatsGradientMax, todayMoving), nsID)
+                end
+                if todayActive > 0 then
+                    local activeString = "Active: " .. m.time(todayActive)
+                    table.insert(firstPass[#firstPass], activeString)
+                    m.colorString(activeString, m.getColor(setupOpts.fileStatsGradientMax, todayActive), nsID)
+                end
+                if todayIdle > 0 then
+                    local idleString = "Idle: " .. m.time(todayIdle)
+                    table.insert(firstPass[#firstPass], idleString)
+                    m.colorString(idleString, m.getColor(setupOpts.fileStatsGradientMax, todayIdle), nsID)
+                end
             end
-            fp[#fp].totalTime = totalTotalTime
+
+            for _ = #firstPass[#firstPass], setupOpts.maxLines do
+                table.insert(firstPass[#firstPass], "")
+            end
+            firstPass[#firstPass].totalTime = totalTotalTime
         end
     end
-    return fp
+    return firstPass
 end
 
 function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
-    local sp = {}
+    local secondPass = {}
     local i = 1
     while i <= #db do
         local maxWidth = 0
@@ -141,11 +178,14 @@ function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
                 maxWidth = #db[i][j]
             end
         end
-        table.insert(sp, {})
-        table.insert(sp[#sp], {})
-        table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], maxWidth + indentDriftForIcon))
+        table.insert(secondPass, {})
+        table.insert(secondPass[#secondPass], {})
+        table.insert(
+            secondPass[#secondPass][#secondPass[#secondPass]],
+            m.center(db[i][1], maxWidth + indentDriftForIcon)
+        )
         for j = 2, #db[i] do
-            table.insert(sp[#sp][#sp[#sp]], m.center(db[i][j], maxWidth))
+            table.insert(secondPass[#secondPass][#secondPass[#secondPass]], m.center(db[i][j], maxWidth))
         end
         while i + 1 <= #db do
             local tmp = i + 1
@@ -156,17 +196,20 @@ function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
                 end
             end
             local secondPassLastConcatantedLen = 0
-            for secondPassLastConcatantedLenLoopJ = 1, #sp[#sp] do
+            for secondPassLastConcatantedLenLoopJ = 1, #secondPass[#secondPass] do
                 secondPassLastConcatantedLen = secondPassLastConcatantedLen
-                    + #sp[#sp][secondPassLastConcatantedLenLoopJ][1]
+                    + #secondPass[#secondPass][secondPassLastConcatantedLenLoopJ][1]
                     + gap
             end
             if secondPassLastConcatantedLen + nextMaxWidth < win_width then
                 i = tmp
-                table.insert(sp[#sp], {})
-                table.insert(sp[#sp][#sp[#sp]], m.center(db[i][1], nextMaxWidth + indentDriftForIcon))
+                table.insert(secondPass[#secondPass], {})
+                table.insert(
+                    secondPass[#secondPass][#secondPass[#secondPass]],
+                    m.center(db[i][1], nextMaxWidth + indentDriftForIcon)
+                )
                 for line = 2, #db[i] do
-                    table.insert(sp[#sp][#sp[#sp]], m.center(db[i][line], nextMaxWidth))
+                    table.insert(secondPass[#secondPass][#secondPass[#secondPass]], m.center(db[i][line], nextMaxWidth))
                 end
             else
                 break
@@ -174,7 +217,7 @@ function m.fileStatsMenu2ndPass(db, win_width, indentDriftForIcon, gap)
         end
         i = i + 1
     end
-    return sp
+    return secondPass
 end
 
 function m.fileStatsMenu3rdPass(db)
