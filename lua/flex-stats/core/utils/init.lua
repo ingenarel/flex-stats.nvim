@@ -13,15 +13,17 @@ function m.gitRoot(file)
 end
 
 function m.gitLs(root)
-    local files = {}
     local out = vim.system({ "git", "-C", root, "ls-files" }):wait()
     if out.code == 0 and out.stdout then
+        local files = {}
         for file in vim.gsplit(out.stdout, "\n") do
             if file ~= "" then
                 table.insert(files, vim.fs.joinpath(root, file))
             end
         end
-        return files
+        if #files > 0 then
+            return files
+        end
     end
 end
 
