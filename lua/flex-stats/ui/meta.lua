@@ -48,4 +48,10 @@ function m.nvimStatsMenu(nvimDb, fileDb, buf, win_width, nsID) end
 ---@field nsID integer
 ---@field page flex.ui.init.showUIOpts.page?
 
----@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"|"git"|"nvim"
+---@param db flex.database
+---@param buf integer the buffer number
+---@param win_width integer the window width
+---shows the raw stats menu on a buffer
+function m.rawStatsMenu(db, buf, win_width) end
+
+---@alias flex.ui.init.showUIOpts.page "file"|"dev"|"quit"|"git"|"nvim"|"raw"

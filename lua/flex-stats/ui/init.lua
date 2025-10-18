@@ -22,6 +22,18 @@ function m.fileStatsMenu(db, buf, win_width, nsID)
     vim.bo[buf].modifiable = false
 end
 
+function m.rawStatsMenu(db, buf, win_width)
+    db = vim.deepcopy(db)
+    db = vim.inspect(db)
+    ---@cast db string
+    db = vim.split(db, "\n", { plain = true })
+    ---@cast db string[]
+    db = utils.addMaps(db, win_width, "raw")
+    vim.bo[buf].modifiable = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, db)
+    vim.bo[buf].modifiable = false
+end
+
 function m.nvimDevStatsMenu(db, buf, win_width, nsID)
     local setupOpts = require("flex-stats").setupOpts
     db = vim.deepcopy(db)
@@ -169,6 +181,11 @@ function m.showUI(opts)
                 m.nvimStatsMenu(db.nvim, db.files, bufID, win_width, opts.nsID)
             end)
         end,
+        raw = function()
+            vim.schedule(function()
+                m.rawStatsMenu(db, bufID, win_width)
+            end)
+        end,
     }
     pages[opts.page]()
     local autocmdID
@@ -190,6 +207,10 @@ function m.showUI(opts)
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "f", function()
         opts.page = "file"
+        pages[opts.page]()
+    end, { noremap = true, silent = true, buffer = true })
+    vim.keymap.set("n", "r", function()
+        opts.page = "raw"
         pages[opts.page]()
     end, { noremap = true, silent = true, buffer = true })
     vim.keymap.set("n", "d", function()
