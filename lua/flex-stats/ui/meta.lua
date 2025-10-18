@@ -5,7 +5,7 @@
 ---@class flex.ui.init
 local m = {}
 
----@param db flex.database
+---@param db flex.database.files
 ---@param buf integer the buffer number
 ---@param win_width integer the window width
 ---@param nsID integer the nsid of the color namespace for flexstats
