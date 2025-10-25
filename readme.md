@@ -5,4 +5,4 @@ show the ui with `:Flex`
 
 example screenshot (ui subject to change in the future):
 
-![1](screenshots/1.ppm)
+![1](screenshots/1.png)
