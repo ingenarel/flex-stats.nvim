@@ -64,6 +64,10 @@ local m = {
 }
 
 function m.setup(opts)
+    if #vim.api.nvim_list_uis() == 0 then
+        vim.notify("running in headless mode, flex-stats.nvim not loaded", vim.log.levels.WARN)
+        return
+    end
     if not vim.uv.fs_stat(vim.fn.stdpath("data") .. "/flex-stats/LOCKFILE") then
         require("flex-stats.core.lock").create()
     else
